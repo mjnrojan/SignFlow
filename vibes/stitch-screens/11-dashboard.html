@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SignFlow Nepal - E-Signature Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#E8760A", // Saffron
+                        "secondary": "#1A3D2B", // Forest Green
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#1A3D2B",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark/10 font-display text-slate-900">
+<div class="flex min-h-screen">
+<!-- Sidebar Navigation -->
+<aside class="w-64 bg-white dark:bg-secondary border-r border-slate-200 dark:border-secondary/50 flex flex-col transition-all duration-300">
+<div class="p-6 flex items-center gap-3">
+<div class="size-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">draw</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-secondary dark:text-white font-bold text-lg leading-tight">SignFlow</h1>
+<p class="text-primary text-xs font-semibold uppercase tracking-wider">Nepal</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary font-semibold" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="text-sm">Documents</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors" href="#">
+<span class="material-symbols-outlined">layers</span>
+<span class="text-sm">Templates</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors" href="#">
+<span class="material-symbols-outlined">contacts</span>
+<span class="text-sm">Contacts</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-sm">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors" href="#">
+<span class="material-symbols-outlined">enhanced_encryption</span>
+<span class="text-sm">Vault</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-100 dark:border-white/10">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm">Settings</span>
+</a>
+<button class="w-full mt-4 flex items-center justify-center gap-2 px-3 py-2 text-slate-400 hover:text-slate-600 transition-colors text-sm">
+<span class="material-symbols-outlined text-sm">side_navigation</span>
+                Collapse
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- Top Navbar -->
+<header class="h-16 bg-white dark:bg-secondary/95 border-b border-slate-200 dark:border-white/10 px-8 flex items-center justify-between sticky top-0 z-10">
+<div class="flex items-center flex-1 max-w-md">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-white/5 border-none rounded-lg focus:ring-2 focus:ring-primary/50 text-sm" placeholder="Search documents, templates..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center bg-slate-100 dark:bg-white/10 rounded-lg p-1">
+<button class="px-3 py-1 text-xs font-bold rounded bg-white dark:bg-secondary text-primary shadow-sm">EN</button>
+<button class="px-3 py-1 text-xs font-medium text-slate-500 hover:text-slate-700">NP</button>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full border-2 border-white"></span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full">
+<span class="material-symbols-outlined">dark_mode</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-slate-200"></div>
+<div class="flex items-center gap-3 cursor-pointer group">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-semibold dark:text-white">Rajesh Hamal</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-tighter">Premium User</p>
+</div>
+<div class="size-10 rounded-full bg-secondary border-2 border-primary overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile avatar of a professional man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCT6M0izLLvZjUL3LFeil8XPo3iImAE_uQlrlZ2FrRf7-r5rA5HWQbb0aOgLViEucXDwSIJM2673oOw6SxG4YCV4561pm6xI-ZH6EnyKS59Ly5TYEPjyDwQK9yYAH_iM0-_AYshh6gGUmkNN_hYr1ksJq1Mw8KENxEsQmoourY4o034id3hIBMU6CXnXuzquWHr699a0gbzYCASL6ZCF0M8h7EK0WM2XJqkyU139HiJDdqnlExKwdZcNxRUpzri5PHcxiH1TkeKvCg"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="flex-1 overflow-y-auto p-8 bg-background-light">
+<!-- Quick Actions -->
+<div class="flex flex-col md:flex-row gap-4 mb-8">
+<button class="flex-1 flex items-center justify-between p-6 bg-primary text-white rounded-xl shadow-lg shadow-primary/20 hover:scale-[1.01] transition-transform">
+<div class="flex items-center gap-4">
+<div class="bg-white/20 p-3 rounded-lg">
+<span class="material-symbols-outlined text-3xl">add_notes</span>
+</div>
+<div class="text-left">
+<h3 class="text-xl font-bold">New Document</h3>
+<p class="text-white/80 text-sm">Upload or use template to sign</p>
+</div>
+</div>
+<span class="material-symbols-outlined">arrow_forward_ios</span>
+</button>
+<button class="flex-1 flex items-center justify-between p-6 bg-secondary text-white rounded-xl shadow-lg shadow-secondary/20 hover:scale-[1.01] transition-transform">
+<div class="flex items-center gap-4">
+<div class="bg-white/10 p-3 rounded-lg">
+<span class="material-symbols-outlined text-3xl">post_add</span>
+</div>
+<div class="text-left">
+<h3 class="text-xl font-bold">Create Template</h3>
+<p class="text-white/70 text-sm">Standardize your frequent workflows</p>
+</div>
+</div>
+<span class="material-symbols-outlined">arrow_forward_ios</span>
+</button>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+<div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+<p class="text-slate-500 text-xs font-medium uppercase">Draft</p>
+<div class="flex items-end justify-between mt-2">
+<span class="text-2xl font-bold">12</span>
+<span class="text-slate-400 material-symbols-outlined">edit_note</span>
+</div>
+</div>
+<div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+<p class="text-slate-500 text-xs font-medium uppercase">Sent</p>
+<div class="flex items-end justify-between mt-2">
+<span class="text-2xl font-bold text-primary">45</span>
+<span class="text-primary/50 material-symbols-outlined">send</span>
+</div>
+</div>
+<div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+<p class="text-slate-500 text-xs font-medium uppercase">In Progress</p>
+<div class="flex items-end justify-between mt-2">
+<span class="text-2xl font-bold text-blue-600">28</span>
+<span class="text-blue-300 material-symbols-outlined">pending</span>
+</div>
+</div>
+<div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+<p class="text-slate-500 text-xs font-medium uppercase">Completed</p>
+<div class="flex items-end justify-between mt-2">
+<span class="text-2xl font-bold text-secondary">156</span>
+<span class="text-secondary/40 material-symbols-outlined">check_circle</span>
+</div>
+</div>
+<div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+<p class="text-slate-500 text-xs font-medium uppercase">Declined</p>
+<div class="flex items-end justify-between mt-2">
+<span class="text-2xl font-bold text-red-500">3</span>
+<span class="text-red-300 material-symbols-outlined">cancel</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Recent Activity -->
+<div class="lg:col-span-1 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden h-fit">
+<div class="p-5 border-b border-slate-100 flex items-center justify-between">
+<h2 class="font-bold text-slate-800">Recent Activity</h2>
+<button class="text-xs text-primary font-semibold hover:underline">View All</button>
+</div>
+<div class="p-5 space-y-6">
+<div class="flex gap-4">
+<div class="size-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-sm">history_edu</span>
+</div>
+<div>
+<p class="text-sm text-slate-700 leading-tight"><strong>Arun Sharma</strong> signed <span class="text-primary cursor-pointer hover:underline">Rental Agreement.pdf</span></p>
+<p class="text-[10px] text-slate-400 mt-1">2 minutes ago</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="size-8 rounded-full bg-secondary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary text-sm">note_add</span>
+</div>
+<div>
+<p class="text-sm text-slate-700 leading-tight">New template created: <span class="text-secondary cursor-pointer hover:underline">HR Offer Letter</span></p>
+<p class="text-[10px] text-slate-400 mt-1">1 hour ago</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="size-8 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-blue-600 text-sm">forward_to_inbox</span>
+</div>
+<div>
+<p class="text-sm text-slate-700 leading-tight">Sent <span class="text-primary cursor-pointer hover:underline">Vendor_MOU.pdf</span> to <strong>Binita Karki</strong></p>
+<p class="text-[10px] text-slate-400 mt-1">3 hours ago</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="size-8 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-red-600 text-sm">report</span>
+</div>
+<div>
+<p class="text-sm text-slate-700 leading-tight"><strong>Suman Adhikari</strong> declined <span class="text-primary cursor-pointer hover:underline">Loan_TermSheet.pdf</span></p>
+<p class="text-[10px] text-slate-400 mt-1">Yesterday</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Active Documents Table -->
+<div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+<div class="p-5 border-b border-slate-100 flex items-center justify-between">
+<h2 class="font-bold text-slate-800">Active Documents</h2>
+<div class="flex gap-2">
+<button class="p-1.5 hover:bg-slate-50 rounded-lg text-slate-400">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+</button>
+<button class="p-1.5 hover:bg-slate-50 rounded-lg text-slate-400">
+<span class="material-symbols-outlined text-lg">more_vert</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-slate-50/50 text-slate-400 text-[10px] uppercase tracking-widest font-bold">
+<th class="px-6 py-4">Document Name</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-6 py-4">Last Updated</th>
+<th class="px-6 py-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<tr class="hover:bg-slate-50/50 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary/60">description</span>
+<span class="text-sm font-medium text-slate-700">Property_Lease_Lalitpur.pdf</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded-full text-[10px] font-bold bg-blue-100 text-blue-600 uppercase">In Progress</span>
+</td>
+<td class="px-6 py-4 text-xs text-slate-500">Oct 24, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary/60">description</span>
+<span class="text-sm font-medium text-slate-700">Employment_Contract_Binita.pdf</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded-full text-[10px] font-bold bg-secondary/10 text-secondary uppercase">Sent</span>
+</td>
+<td class="px-6 py-4 text-xs text-slate-500">Oct 23, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary/60">description</span>
+<span class="text-sm font-medium text-slate-700">Bank_KYC_Update_Form.pdf</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500 uppercase">Draft</span>
+</td>
+<td class="px-6 py-4 text-xs text-slate-500">Oct 22, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary/60">description</span>
+<span class="text-sm font-medium text-slate-700">Supplier_Agreement_Final.pdf</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded-full text-[10px] font-bold bg-green-100 text-green-700 uppercase">Completed</span>
+</td>
+<td class="px-6 py-4 text-xs text-slate-500">Oct 20, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">download</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="p-4 bg-slate-50/50 flex justify-center">
+<button class="text-sm font-semibold text-slate-500 hover:text-primary flex items-center gap-1">
+                                View all active documents
+                                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

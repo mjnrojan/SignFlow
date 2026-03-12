@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#eb6b0a", // Saffron inspired
+                        "forest": "#1A3D2B",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#121212",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .cursive-font { font-family: 'Dancing Script', cursive; }
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap');
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex min-h-screen flex-col overflow-x-hidden">
+<!-- Navigation -->
+<header class="sticky top-0 z-50 w-full border-b border-primary/10 bg-background-light/80 backdrop-blur-md dark:bg-background-dark/80 px-6 lg:px-20 py-4">
+<div class="mx-auto flex max-w-7xl items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white">
+<span class="material-symbols-outlined">draw</span>
+</div>
+<h2 class="text-xl font-black tracking-tight text-forest dark:text-slate-100">SignNepal</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Features</a>
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Solutions</a>
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Pricing</a>
+<div class="h-4 w-[1px] bg-primary/20"></div>
+<button class="flex items-center gap-1 text-sm font-bold text-forest dark:text-slate-300">
+<span class="material-symbols-outlined text-sm">language</span> EN/NP
+                    </button>
+</nav>
+<div class="flex items-center gap-3">
+<button class="hidden sm:flex text-sm font-bold px-4 py-2 rounded-lg hover:bg-primary/5 transition-colors">Log In</button>
+<button class="bg-primary text-white text-sm font-bold px-5 py-2.5 rounded-lg shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+                        Get Started Free
+                    </button>
+</div>
+</div>
+</header>
+<main class="flex-1">
+<!-- Hero Section -->
+<section class="relative px-6 py-20 lg:px-20 lg:py-32 overflow-hidden">
+<div class="mx-auto max-w-7xl grid lg:grid-cols-2 gap-16 items-center">
+<div class="flex flex-col gap-8">
+<div class="inline-flex items-center gap-2 rounded-full bg-forest/5 dark:bg-primary/10 px-4 py-1 text-forest dark:text-primary border border-forest/10">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+<span class="text-xs font-bold uppercase tracking-wider">Trusted by 500+ Local Businesses</span>
+</div>
+<h1 class="text-5xl lg:text-7xl font-black leading-[1.1] text-forest dark:text-slate-100">
+                            The Future of <span class="text-primary italic">Signing</span> in Nepal.
+                        </h1>
+<p class="text-lg text-slate-600 dark:text-slate-400 max-w-lg leading-relaxed">
+                            Legally binding digital signatures designed for the Nepali market. From secure land documents to corporate contracts—all in one click.
+                        </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-forest text-white h-14 px-8 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-forest/90 transition-all">
+<span class="material-symbols-outlined">ink_pen</span>
+                                Sign your first document
+                            </button>
+<button class="border-2 border-primary/20 h-14 px-8 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-primary/5 transition-all">
+                                Watch Demo Video
+                            </button>
+</div>
+</div>
+<!-- Floating Signature Pad Demo -->
+<div class="relative">
+<div class="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-forest/20 blur-3xl rounded-full opacity-50"></div>
+<div class="relative bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800">
+<div class="flex items-center justify-between mb-6">
+<span class="text-sm font-bold text-slate-400">SIGNATURE PREVIEW</span>
+<div class="flex gap-1.5">
+<div class="size-2.5 rounded-full bg-red-400"></div>
+<div class="size-2.5 rounded-full bg-amber-400"></div>
+<div class="size-2.5 rounded-full bg-emerald-400"></div>
+</div>
+</div>
+<div class="space-y-4">
+<label class="text-xs font-bold text-slate-500 uppercase">Type your name</label>
+<input class="w-full h-14 bg-slate-50 dark:bg-slate-800 border-none rounded-xl px-4 font-semibold text-lg focus:ring-2 ring-primary" placeholder="e.g. Rajesh Hamal" type="text"/>
+<div class="mt-8 border-b-2 border-slate-200 dark:border-slate-700 pb-2">
+<div class="cursive-font text-5xl text-primary transform -rotate-2 select-none">Rajesh Hamal</div>
+</div>
+<p class="text-[10px] text-center text-slate-400 mt-4 italic">Digitally encrypted and verified by SignNepal Security</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Experience the Flow Section -->
+<section class="bg-forest py-24 px-6 lg:px-20 text-white overflow-hidden">
+<div class="mx-auto max-w-7xl">
+<div class="text-center mb-20">
+<h2 class="text-3xl lg:text-5xl font-black mb-4">Experience the Flow</h2>
+<p class="text-slate-300 max-w-2xl mx-auto">Witness the seamless journey of your document from start to finish.</p>
+</div>
+<div class="relative flex flex-col md:flex-row items-center justify-between gap-12 lg:px-20">
+<!-- Progress Line -->
+<div class="absolute top-1/2 left-0 w-full h-1 bg-white/10 hidden md:block -translate-y-1/2">
+<div class="h-full bg-primary w-2/3 shadow-[0_0_15px_rgba(235,107,10,0.5)]"></div>
+</div>
+<!-- Step 1: Upload -->
+<div class="relative z-10 flex flex-col items-center gap-6 group">
+<div class="size-20 rounded-2xl bg-primary flex items-center justify-center shadow-2xl shadow-primary/20 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl">cloud_upload</span>
+</div>
+<div class="text-center">
+<h4 class="font-bold text-xl mb-1">Upload</h4>
+<p class="text-sm text-slate-400">PDF, Word, or Scans</p>
+</div>
+</div>
+<!-- Step 2: Edit (Animated Document) -->
+<div class="relative z-10 flex flex-col items-center gap-6 group">
+<div class="size-24 rounded-2xl bg-white text-forest flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform overflow-hidden">
+<div class="relative w-12 h-16 border-2 border-forest/20 rounded-md p-2 flex flex-col gap-1.5">
+<div class="w-full h-1 bg-forest/10 rounded"></div>
+<div class="w-2/3 h-1 bg-forest/10 rounded"></div>
+<div class="w-full h-1 bg-forest/10 rounded"></div>
+<!-- Animated 'Field' -->
+<div class="absolute top-8 right-1 size-4 bg-primary/40 border border-primary rounded text-[8px] flex items-center justify-center font-bold">S</div>
+</div>
+</div>
+<div class="text-center">
+<h4 class="font-bold text-xl mb-1">Edit</h4>
+<p class="text-sm text-slate-400">Drag &amp; Drop Fields</p>
+</div>
+</div>
+<!-- Step 3: Signed -->
+<div class="relative z-10 flex flex-col items-center gap-6 group opacity-50">
+<div class="size-20 rounded-2xl bg-slate-800 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl text-slate-500">verified</span>
+</div>
+<div class="text-center">
+<h4 class="font-bold text-xl mb-1 text-slate-500">Completed</h4>
+<p class="text-sm text-slate-500">Legally Secured</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Features Grid -->
+<section class="py-24 px-6 lg:px-20 bg-background-light dark:bg-slate-950">
+<div class="mx-auto max-w-7xl">
+<div class="grid md:grid-cols-12 md:grid-rows-2 gap-6 h-auto md:h-[600px]">
+<!-- Main Drag & Drop Feature -->
+<div class="md:col-span-8 md:row-span-2 bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 flex flex-col justify-between overflow-hidden group">
+<div>
+<h3 class="text-3xl font-black text-forest dark:text-white mb-4">Precision Drag &amp; Drop</h3>
+<p class="text-slate-500 max-w-md">Place signature, initial, and date fields anywhere on your document with millimeter precision.</p>
+</div>
+<div class="relative mt-8 h-64 bg-slate-50 dark:bg-slate-950 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex items-center justify-center">
+<div class="absolute top-10 left-1/4 px-4 py-2 bg-primary text-white rounded-lg shadow-xl cursor-move flex items-center gap-2 animate-pulse">
+<span class="material-symbols-outlined text-sm">drag_pan</span> Signature Field
+                                </div>
+<div class="absolute bottom-12 right-1/3 px-4 py-2 bg-forest text-white rounded-lg shadow-xl opacity-60">
+                                    Date Signed
+                                </div>
+<div class="flex flex-col items-center gap-2 text-slate-300">
+<span class="material-symbols-outlined text-4xl">description</span>
+<span class="text-xs font-bold uppercase tracking-widest">Document Workspace</span>
+</div>
+</div>
+</div>
+<!-- Status Tracker Card -->
+<div class="md:col-span-4 md:row-span-1 bg-primary rounded-3xl p-8 text-white flex flex-col justify-between">
+<h4 class="font-bold text-xl">Real-time Tracking</h4>
+<div class="space-y-4">
+<div class="flex items-center justify-between text-xs font-bold">
+<span>ENVELOPE #1092</span>
+<span class="bg-white/20 px-2 py-0.5 rounded">66% DONE</span>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-3">
+<div class="size-6 rounded-full bg-forest flex items-center justify-center text-[10px]"><span class="material-symbols-outlined text-[12px]">check</span></div>
+<span class="text-sm font-medium">CEO (Signed)</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="size-6 rounded-full bg-forest flex items-center justify-center text-[10px]"><span class="material-symbols-outlined text-[12px]">check</span></div>
+<span class="text-sm font-medium">Legal Dept (Signed)</span>
+</div>
+<div class="flex items-center gap-3 opacity-60">
+<div class="size-6 rounded-full bg-white/30 flex items-center justify-center text-[10px]">3</div>
+<span class="text-sm font-medium">Client (Pending)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Integration Card -->
+<div class="md:col-span-4 md:row-span-1 bg-forest rounded-3xl p-8 text-white flex flex-col justify-between">
+<h4 class="font-bold text-xl">API Ready</h4>
+<div class="bg-slate-900/50 p-4 rounded-xl font-mono text-xs text-primary leading-relaxed">
+<span class="text-slate-400">// Send for signature</span><br/>
+                                SignNepal.send({<br/>
+                                  template_id: 'np_land_reg',<br/>
+                                  signer: 'rajesh@mail.np'<br/>
+                                });
+                            </div>
+</div>
+</div>
+</div>
+</section>
+<!-- Testimonials -->
+<section class="py-24 px-6 lg:px-20 overflow-hidden">
+<div class="mx-auto max-w-7xl">
+<h2 class="text-center text-4xl font-black mb-16 text-forest dark:text-white">Trusted Across Nepal</h2>
+<div class="grid md:grid-cols-3 gap-8">
+<div class="bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="flex text-primary mb-4">
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+</div>
+<p class="text-slate-600 dark:text-slate-400 italic mb-6">"SignNepal reduced our contract closing time from 4 days to 4 hours. Essential for any modern Nepali business."</p>
+<div class="flex items-center gap-4">
+<div class="size-10 rounded-full bg-slate-200 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Profile photo of a Nepali business executive" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBx8HBr8jFetg5m1o2Jho5qqXsj4AKosRGMKHwjJbTl0YPK7uny2noCJb-aTMHES29b8zRWdV0Gb42YOv_ddTvW4FF_9sxvoH8wMLULZodhPnFkzI5x-WrmhJ_jfTP1nOd_ntXxyRYYWOLdxlARazlYbWKjy8w0UdePQcgYvfwnL8_fgCvcxNzUjB2SHxAqaUvid7pbSjtkfmwXkOfyhSjiDS3oNQnjZGT_iwsYb8V1VhHvuL3Hca0kMIYdI_gluCExaKaJGTrDXC8"/>
+</div>
+<div>
+<p class="font-bold text-sm">Sunil Thapa</p>
+<p class="text-xs text-slate-500">CEO, Himalayan Tech</p>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 transform scale-105 border-primary/20">
+<div class="flex text-primary mb-4">
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+</div>
+<p class="text-slate-600 dark:text-slate-400 italic mb-6">"Perfect for remote clients. The Nepali language support made it easy for our older stakeholders to adapt."</p>
+<div class="flex items-center gap-4">
+<div class="size-10 rounded-full bg-slate-200 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Profile photo of a female lawyer in Nepal" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDP-bA9buYgV7v-BGvh4MfnDf6p8diVuC8ilZ_Yt5aGWGYNt4HctU1UQ_pFOeOknZip1uLVVJ2iavK8UeF2IQ4n0zacWDaIGJpDVAGtFFcYocN26dSXkBWKckbrHvrjmcZANwd3aYOMPeVetGxLom5yDM4x0LGX30AXCw0p0MBloV_yxzYjsz4w70RuVfaL7HGvQm-fIqA4l6NW27l8YsP5AFUTSHFPH5jNPy4eFlVSJbhh7LVyCSnj32IsRGBAhDNwmUzUO4WTBU"/>
+</div>
+<div>
+<p class="font-bold text-sm">Priya Adhikari</p>
+<p class="text-xs text-slate-500">Legal Partner, Adhikari &amp; Co.</p>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="flex text-primary mb-4">
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+</div>
+<p class="text-slate-600 dark:text-slate-400 italic mb-6">"The security features are world-class. We trust SignNepal with our most sensitive financial documents."</p>
+<div class="flex items-center gap-4">
+<div class="size-10 rounded-full bg-slate-200 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Profile photo of a banker in Nepal" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3q9OyguTxSzEILNilLRYtSy50CbgUyHi1y-XQ_gCkXCWnnbaFdvjlxVh-gUgPvkQ9dKmnNEZKl5VslXUTUP69wIJ8WUYKKfxWp_MrVFdbliSTWEEdSRwZr5FstyAQS7mKbIGLZqygxEv0zwTRgdx_GSv3uxbbidiCHPN13cDJimbySZkWWajKOzfngaN_CWtr6lF3GfsRV_l4gzZiolMSd4qrk58NCLqfFz-QzcqmSSoZRf425TqGwThAJwlGLdELoMlZGqr_Hgs"/>
+</div>
+<div>
+<p class="font-bold text-sm">Bikram Shrestha</p>
+<p class="text-xs text-slate-500">Ops Manager, Everest Fin</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-24 px-6 lg:px-20">
+<div class="mx-auto max-w-5xl bg-primary rounded-[3rem] p-12 lg:p-20 text-center relative overflow-hidden">
+<div class="absolute -top-20 -right-20 size-80 bg-white/10 rounded-full blur-3xl"></div>
+<div class="relative z-10 flex flex-col items-center gap-8">
+<h2 class="text-4xl lg:text-6xl font-black text-white leading-tight">Ready to transform your business workflow?</h2>
+<p class="text-white/80 text-lg max-w-xl">Join thousands of businesses in Nepal who are signing smarter, faster, and more securely.</p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-forest text-white h-16 px-10 rounded-2xl font-black text-lg shadow-xl hover:scale-105 transition-transform">
+                                Create Free Account
+                            </button>
+<button class="bg-white text-primary h-16 px-10 rounded-2xl font-black text-lg shadow-xl hover:bg-slate-50 transition-colors">
+                                Contact Sales
+                            </button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 py-12 px-6 lg:px-20">
+<div class="mx-auto max-w-7xl grid grid-cols-2 md:grid-cols-4 gap-12">
+<div class="col-span-2 md:col-span-1 flex flex-col gap-6">
+<div class="flex items-center gap-2">
+<div class="size-8 rounded-lg bg-primary text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">draw</span>
+</div>
+<h2 class="text-lg font-black tracking-tight text-forest dark:text-white">SignNepal</h2>
+</div>
+<p class="text-sm text-slate-500 leading-relaxed">The standard for electronic signatures in Nepal. Compliant with the Electronic Transactions Act (ETA) 2063.</p>
+</div>
+<div>
+<h5 class="font-bold text-forest dark:text-white mb-6 uppercase text-xs tracking-widest">Product</h5>
+<ul class="space-y-4 text-sm text-slate-500">
+<li><a class="hover:text-primary transition-colors" href="#">Digital Signature</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Document Editor</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">API for Developers</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold text-forest dark:text-white mb-6 uppercase text-xs tracking-widest">Company</h5>
+<ul class="space-y-4 text-sm text-slate-500">
+<li><a class="hover:text-primary transition-colors" href="#">About Us</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Legality</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Security</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold text-forest dark:text-white mb-6 uppercase text-xs tracking-widest">Support</h5>
+<ul class="space-y-4 text-sm text-slate-500">
+<li><a class="hover:text-primary transition-colors" href="#">Help Center</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Contact Support</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Status</a></li>
+</ul>
+</div>
+</div>
+<div class="mx-auto max-w-7xl mt-12 pt-12 border-t border-slate-100 dark:border-slate-900 flex flex-col md:flex-row justify-between items-center gap-6">
+<p class="text-xs text-slate-400">© 2024 SignNepal Technologies Pvt. Ltd. All rights reserved.</p>
+<div class="flex gap-6 text-xs text-slate-400">
+<a class="hover:text-primary" href="#">Privacy Policy</a>
+<a class="hover:text-primary" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

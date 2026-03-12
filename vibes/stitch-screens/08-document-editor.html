@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SignFlow Nepal - Document Editor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#eb6b0a",
+                "background-light": "#f8f7f5",
+                "background-dark": "#221810",
+              },
+              fontFamily: {
+                "display": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+      </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .canvas-bg { background-image: radial-gradient(#d1d5db 1px, transparent 1px); background-size: 20px 20px; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-hidden">
+<!-- Top Navigation Bar -->
+<header class="h-16 border-b border-primary/10 bg-white dark:bg-slate-900 flex items-center justify-between px-6 z-50 relative">
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-primary/10 rounded-lg transition-colors text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="h-8 w-px bg-primary/10 mx-2"></div>
+<div>
+<h1 class="text-sm font-semibold truncate max-w-[300px]">Consultancy Agreement - Kathmandu Tech.pdf</h1>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px] text-green-600">cloud_done</span>
+<p class="text-[11px] text-slate-500 uppercase tracking-wider font-medium">All changes saved</p>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1 bg-primary/5 px-3 py-1.5 rounded-lg border border-primary/10 mr-4">
+<span class="material-symbols-outlined text-primary text-sm">zoom_in</span>
+<span class="text-xs font-bold text-primary">100%</span>
+</div>
+<button class="px-4 py-2 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                Save Draft
+            </button>
+<button class="px-6 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-bold rounded-lg shadow-sm shadow-primary/20 transition-all flex items-center gap-2">
+<span>Send Document</span>
+<span class="material-symbols-outlined text-sm">send</span>
+</button>
+<div class="ml-4 size-9 rounded-full bg-primary/20 border border-primary/30 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCB5cUE4OlU1p1qBxLOLJrYZ5FaqkyXHI_Pd-SG-MzW-rkFrYjJl9BCj_BS81HgVSQ-itmnQTQSbJo5v40KVRuy6G3Y6aIuEo_q5V0mP9pW6a1BfTuMIrcnwP3c8eVyoDK7IgGBn6jmpauXQm87qe27Mfvn3jZ18hUQh6DFeRwZkbEd49Adgthgfp2-xlXBEGbQqrcRDr6iVEcNAHqNE0bjIwSFmmUnGIxADeSG1unsdQ8rFR7u5mJNlmaoi8ezFbCPNuBmt7vZ_hU"/>
+</div>
+</div>
+</header>
+<main class="flex h-[calc(100vh-64px)]">
+<!-- Left Panel: Field Toolbar -->
+<aside class="w-64 bg-white dark:bg-slate-900 border-r border-primary/10 flex flex-col p-4 gap-6 shrink-0">
+<section>
+<h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-[0.1em] mb-4">Standard Fields</h2>
+<div class="grid grid-cols-1 gap-2">
+<div class="group cursor-grab active:cursor-grabbing flex items-center gap-3 p-3 bg-primary/5 hover:bg-primary/10 border border-dashed border-primary/30 rounded-lg transition-all">
+<span class="material-symbols-outlined text-primary">draw</span>
+<span class="text-sm font-medium">Signature</span>
+</div>
+<div class="group cursor-grab active:cursor-grabbing flex items-center gap-3 p-3 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg transition-all">
+<span class="material-symbols-outlined text-slate-600">person_search</span>
+<span class="text-sm font-medium">Initials</span>
+</div>
+<div class="group cursor-grab active:cursor-grabbing flex items-center gap-3 p-3 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg transition-all">
+<span class="material-symbols-outlined text-slate-600">calendar_today</span>
+<span class="text-sm font-medium">Date Signed</span>
+</div>
+<div class="group cursor-grab active:cursor-grabbing flex items-center gap-3 p-3 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg transition-all">
+<span class="material-symbols-outlined text-slate-600">text_fields</span>
+<span class="text-sm font-medium">Text Field</span>
+</div>
+<div class="group cursor-grab active:cursor-grabbing flex items-center gap-3 p-3 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg transition-all">
+<span class="material-symbols-outlined text-slate-600">check_box</span>
+<span class="text-sm font-medium">Checkbox</span>
+</div>
+</div>
+</section>
+<section>
+<h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-[0.1em] mb-4">Nepali Enterprise</h2>
+<div class="group cursor-grab active:cursor-grabbing flex items-center gap-3 p-4 bg-primary text-white rounded-xl shadow-lg shadow-primary/20 transition-all transform hover:scale-[1.02]">
+<span class="material-symbols-outlined">approval_delegation</span>
+<div class="flex flex-col">
+<span class="text-sm font-bold">Company Seal</span>
+<span class="text-[10px] opacity-80 uppercase font-medium">Required for LLCs</span>
+</div>
+</div>
+</section>
+<div class="mt-auto">
+<button class="w-full flex items-center justify-center gap-2 p-3 text-sm font-semibold text-primary border border-primary/20 bg-primary/5 rounded-lg hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-sm">add</span>
+<span>Custom Field</span>
+</button>
+</div>
+</aside>
+<!-- Center Panel: Canvas -->
+<section class="flex-1 bg-slate-100 dark:bg-slate-950 overflow-y-auto canvas-bg p-12 flex flex-col items-center">
+<!-- PDF Rendered Page 1 -->
+<div class="w-[800px] bg-white shadow-2xl relative min-h-[1100px] p-20 select-none">
+<!-- Watermark -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03] rotate-[-45deg]">
+<span class="text-9xl font-black">SIGNFLOW</span>
+</div>
+<!-- Document Content Simulation -->
+<div class="relative z-10 space-y-8">
+<div class="text-center space-y-2">
+<h2 class="text-2xl font-bold uppercase tracking-tight">Consultancy Services Agreement</h2>
+<p class="text-sm text-slate-500 font-medium tracking-wide">Ref No: KTPL/AGR/2024/082</p>
+</div>
+<div class="space-y-4 text-sm leading-relaxed text-slate-800">
+<p>This Consultancy Agreement (the "Agreement") is made on this 14th day of October 2023, by and between:</p>
+<p><strong class="font-bold">Kathmandu Tech Pvt. Ltd.</strong>, a company incorporated under the laws of Nepal, having its registered office at Ward No. 3, Maharajgunj, Kathmandu (hereinafter referred to as the "Client").</p>
+<p>AND</p>
+<p><strong class="font-bold">Himalayan Digital Solutions</strong>, represented by <strong class="font-bold">Rajesh Hamal</strong>, residing at Lalitpur, Nepal (hereinafter referred to as the "Consultant").</p>
+<div class="pt-8 pb-4">
+<h3 class="font-bold uppercase mb-2">1. Scope of Work</h3>
+<p>The Consultant agrees to provide software architecture advisory services for the Client's upcoming mobile banking infrastructure project. The engagement shall commence on Nov 1, 2023.</p>
+</div>
+</div>
+<!-- Draggable Fields Placed Overlay -->
+<div class="pt-24 grid grid-cols-2 gap-20">
+<div class="space-y-12">
+<div class="relative">
+<p class="text-[11px] font-bold text-slate-400 mb-8 uppercase">CLIENT AUTHORIZATION</p>
+<!-- Placed Seal -->
+<div class="absolute -top-4 left-4 w-40 h-40 border-2 border-primary/50 bg-primary/5 rounded-full flex flex-col items-center justify-center p-4 ring-2 ring-primary group cursor-pointer">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase whitespace-nowrap">Company Seal</div>
+<span class="material-symbols-outlined text-primary text-5xl opacity-40">approval_delegation</span>
+<p class="text-[9px] text-primary font-bold text-center mt-2 uppercase opacity-60 italic">Official Stamp Area</p>
+<div class="absolute -right-2 top-1/2 -translate-y-1/2 size-5 bg-white border border-primary text-primary rounded-full flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[12px]">drag_indicator</span>
+</div>
+</div>
+<div class="border-t-2 border-slate-300 w-full pt-2 mt-40">
+<p class="text-xs font-bold">Managing Director</p>
+<p class="text-xs text-slate-500">Kathmandu Tech Pvt. Ltd.</p>
+</div>
+</div>
+</div>
+<div class="space-y-12">
+<div class="relative">
+<p class="text-[11px] font-bold text-slate-400 mb-8 uppercase">CONSULTANT ACCEPTANCE</p>
+<!-- Placed Signature -->
+<div class="absolute -top-2 left-0 w-48 h-16 border-2 border-primary/50 bg-primary/5 flex items-center justify-center p-2 ring-2 ring-primary group cursor-pointer shadow-lg shadow-primary/10">
+<div class="absolute -top-3 right-2 bg-primary text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase">Rajesh Hamal</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">draw</span>
+<span class="text-xs font-bold text-primary italic">Signature Field</span>
+</div>
+<div class="absolute -left-2 top-1/2 -translate-y-1/2 size-5 bg-white border border-primary text-primary rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[12px]">drag_indicator</span>
+</div>
+</div>
+<div class="border-t-2 border-slate-300 w-full pt-2 mt-40">
+<p class="text-xs font-bold">Rajesh Hamal</p>
+<p class="text-xs text-slate-500">Himalayan Digital Solutions</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Page Indicator -->
+<div class="mt-6 flex items-center gap-4 bg-white/80 backdrop-blur px-4 py-2 rounded-full border border-primary/10 shadow-sm sticky bottom-8">
+<button class="material-symbols-outlined text-slate-400">chevron_left</button>
+<span class="text-xs font-bold text-slate-600">Page 1 of 4</span>
+<button class="material-symbols-outlined text-slate-400">chevron_right</button>
+</div>
+</section>
+<!-- Right Panel: Properties & Recipients -->
+<aside class="w-80 bg-white dark:bg-slate-900 border-l border-primary/10 flex flex-col shrink-0">
+<!-- Properties Header -->
+<div class="p-6 border-b border-primary/10">
+<h2 class="text-xs font-bold text-slate-400 uppercase tracking-[0.1em] mb-4">Field Properties</h2>
+<div class="bg-primary/5 p-4 rounded-xl border border-primary/20 space-y-4">
+<div>
+<label class="text-[10px] font-bold text-primary uppercase mb-1 block">Assigned To</label>
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[14px]">person</span>
+</div>
+<span class="text-sm font-bold">Rajesh Hamal</span>
+</div>
+</div>
+<div>
+<label class="text-[10px] font-bold text-primary uppercase mb-1 block">Field Type</label>
+<span class="text-sm">Legal Signature</span>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="text-xs text-slate-500 font-medium">Required Field</span>
+<div class="w-8 h-4 bg-primary rounded-full relative">
+<div class="absolute right-0.5 top-0.5 size-3 bg-white rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recipients List -->
+<div class="flex-1 overflow-y-auto p-6 space-y-6">
+<div>
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-xs font-bold text-slate-400 uppercase tracking-[0.1em]">Recipients</h2>
+<button class="text-primary material-symbols-outlined">person_add</button>
+</div>
+<div class="space-y-3">
+<!-- Recipient 1 -->
+<div class="flex items-start gap-3 p-3 border border-slate-100 dark:border-slate-800 rounded-lg bg-slate-50/50 dark:bg-slate-800/50">
+<div class="size-6 rounded bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] font-black shrink-0">1</div>
+<div class="flex-1 min-w-0">
+<p class="text-xs font-bold truncate">Rajesh Hamal</p>
+<p class="text-[10px] text-slate-500 truncate">rajesh@himalayan.np</p>
+<div class="mt-2 flex items-center gap-2">
+<span class="text-[10px] font-bold text-orange-600 bg-orange-100 px-1.5 py-0.5 rounded">Needs to Sign</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-300 text-lg">more_vert</span>
+</div>
+<!-- Recipient 2 -->
+<div class="flex items-start gap-3 p-3 border border-slate-100 dark:border-slate-800 rounded-lg opacity-60">
+<div class="size-6 rounded bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] font-black shrink-0">2</div>
+<div class="flex-1 min-w-0">
+<p class="text-xs font-bold truncate">Binod Chaudhary</p>
+<p class="text-[10px] text-slate-500 truncate">ceo@kathmandutech.com.np</p>
+<div class="mt-2 flex items-center gap-2">
+<span class="text-[10px] font-bold text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">Needs to Seal</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-300 text-lg">more_vert</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar Footer -->
+<div class="p-6 border-t border-primary/10">
+<div class="flex items-center justify-between mb-4">
+<span class="text-xs font-medium text-slate-500">Signing Order</span>
+<div class="w-8 h-4 bg-slate-200 rounded-full relative">
+<div class="absolute left-0.5 top-0.5 size-3 bg-white rounded-full"></div>
+</div>
+</div>
+<button class="w-full py-2 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-xs font-bold rounded hover:opacity-90 transition-opacity">
+                    Add Cc Recipient
+                </button>
+</div>
+</aside>
+</main>
+</body></html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#eb6b0a",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221810",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Secure Vault - Document Archive</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex min-h-screen flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between border-b border-primary/10 bg-white dark:bg-slate-900/50 px-6 py-3 lg:px-40">
+<div class="flex items-center gap-4">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white">
+<span class="material-symbols-outlined">shield_lock</span>
+</div>
+<div>
+<h2 class="text-lg font-bold leading-tight tracking-tight">Secure Vault</h2>
+<p class="text-xs text-primary font-medium uppercase tracking-widest">Enterprise Archive</p>
+</div>
+</div>
+<div class="flex flex-1 justify-end gap-4 items-center">
+<div class="hidden md:flex gap-2">
+<button class="flex h-10 items-center justify-center rounded-lg bg-primary/10 px-3 text-primary hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined">lock</span>
+</button>
+<button class="flex h-10 items-center justify-center rounded-lg bg-primary/10 px-3 text-primary hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined">verified_user</span>
+</button>
+</div>
+<div class="h-10 w-10 rounded-full border-2 border-primary/20 bg-center bg-no-repeat bg-cover" data-alt="User profile avatar placeholder" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD8FeIGh8RAX6ucQzD5Qzam_9S_iJUTF_RxA9wS9KogkTUh5Ixn4A79UX5dceYOUxe1NVb97ZRdASYtXFjOtj8sWBhsJvQFzqDDsgEh9sWFMHzthL0qFzFXwAHCHriTPL6tqhotI3UaU8ee9VwV3Stq_da0VhJLWm_vlKX1V9kES6Sve5_OFpZLbo9gMEXZ1l9w2vKw_zNuUGDi9zjuGPeKfB3uzCcrN-CZ9k6mcqNnrF55cqoOKenGX4NOqihmSHvYtseGmQ1JDmI')"></div>
+</div>
+</header>
+<main class="flex flex-1 flex-col lg:flex-row lg:px-40 py-8 gap-8">
+<!-- Sidebar Navigation -->
+<aside class="w-full lg:w-64 flex flex-col gap-6 px-4 lg:px-0">
+<div class="flex items-center gap-3 p-4 bg-white dark:bg-slate-900/30 rounded-xl border border-primary/10">
+<div class="h-12 w-12 rounded-full border-2 border-primary bg-center bg-no-repeat bg-cover" data-alt="Authorized user verification photo" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAs6eMqzMcIffA6BdyigyTVknhzcB5riCkma7DQH6h5CxW5RtxYesCKunOOqMyOJl-4fQbJ_UDqnofIG_MA5COfovDZMeAgRTebcyUh0L6PdPWI42NbJm7Z5sYRtp2YJ0Ht1Dm-ND7_CH-xbmnbkD8nenjzCXgF9_3o4fUd3eRtBJ3VbOZLxkxdoqZTyNOPSZid6nL3S2kkpzqLJNTabQ7pyuv2Yz-9JZW1WEVW75_ZjHjoygyfPjKJmqMiFyjYh7caT6xLba4W7nA')"></div>
+<div class="flex flex-col">
+<h1 class="text-sm font-bold">Secure User</h1>
+<p class="text-xs text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                            Verified Account
+                        </p>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-primary/5 transition-colors" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-sm font-semibold">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary text-white shadow-md shadow-primary/20" href="#">
+<span class="material-symbols-outlined">cached</span>
+<span class="text-sm font-semibold">Vault Archive</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-primary/5 transition-colors" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span class="text-sm font-semibold">Audit Logs</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-primary/5 transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-semibold">Security Settings</span>
+</a>
+</nav>
+<div class="mt-auto p-4 bg-primary/5 rounded-xl border border-primary/20">
+<p class="text-[11px] font-bold text-primary uppercase mb-2 tracking-wider">Vault Integrity</p>
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-green-600">encrypted</span>
+<span class="text-xs font-medium">AES-256 Encrypted</span>
+</div>
+<p class="text-[10px] leading-relaxed text-slate-500">All documents are immutable and timestamped on the secure ledger.</p>
+</div>
+</aside>
+<!-- Main Content Area -->
+<section class="flex-1 flex flex-col gap-6 px-4 lg:px-0">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h2 class="text-2xl font-bold tracking-tight">Secure Document Storage</h2>
+<p class="text-sm text-slate-500">Access and manage your verified archival records</p>
+</div>
+<button class="flex items-center justify-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg font-bold text-sm shadow-lg shadow-primary/25 hover:brightness-110 transition-all">
+<span class="material-symbols-outlined">upload_file</span>
+                        Archive Document
+                    </button>
+</div>
+<!-- Filters & Search -->
+<div class="bg-white dark:bg-slate-900/40 p-4 rounded-xl border border-primary/10 flex flex-col gap-4">
+<div class="flex flex-col md:flex-row gap-3">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full pl-10 pr-4 py-2.5 bg-background-light dark:bg-slate-800 border-none rounded-lg focus:ring-2 focus:ring-primary text-sm" placeholder="Search by document name or Audit ID..." type="text"/>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-4 py-2.5 bg-background-light dark:bg-slate-800 rounded-lg text-sm font-medium border border-transparent hover:border-primary/20">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+                                Date Range
+                                <span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2.5 bg-background-light dark:bg-slate-800 rounded-lg text-sm font-medium border border-transparent hover:border-primary/20">
+<span class="material-symbols-outlined text-sm">category</span>
+                                Document Type
+                                <span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Document List -->
+<div class="bg-white dark:bg-slate-900/40 rounded-xl border border-primary/10 overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm">
+<thead class="bg-primary/5 border-b border-primary/10 text-slate-600 dark:text-slate-400 uppercase text-[11px] font-bold tracking-widest">
+<tr>
+<th class="px-6 py-4">Document Name</th>
+<th class="px-6 py-4">Signed Date</th>
+<th class="px-6 py-4">All Signers</th>
+<th class="px-6 py-4">Audit Trail ID</th>
+<th class="px-6 py-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-primary/5">
+<tr class="hover:bg-primary/5 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">description</span>
+<div>
+<p class="font-semibold">Service_Agreement_V4.pdf</p>
+<p class="text-[10px] text-slate-400">Legal Agreement • 2.4 MB</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-medium text-slate-600 dark:text-slate-300">Oct 24, 2023</td>
+<td class="px-6 py-4">
+<div class="flex -space-x-2">
+<div class="h-6 w-6 rounded-full border border-white bg-slate-200 flex items-center justify-center text-[10px] font-bold">JD</div>
+<div class="h-6 w-6 rounded-full border border-white bg-primary/20 text-primary flex items-center justify-center text-[10px] font-bold">AS</div>
+<div class="h-6 w-6 rounded-full border border-white bg-slate-800 text-white flex items-center justify-center text-[10px] font-bold">+1</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<code class="px-2 py-1 bg-background-light dark:bg-slate-800 rounded text-[11px] text-primary font-mono font-bold">TRX-982-A45</code>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-primary/10 rounded-lg text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">download</span>
+</button>
+<button class="p-2 hover:bg-primary/10 rounded-lg text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">verified</span>
+<div>
+<p class="font-semibold">Employment_Contract_Blake.pdf</p>
+<p class="text-[10px] text-slate-400">Human Resources • 1.1 MB</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-medium text-slate-600 dark:text-slate-300">Nov 02, 2023</td>
+<td class="px-6 py-4">
+<div class="flex -space-x-2">
+<div class="h-6 w-6 rounded-full border border-white bg-slate-200 flex items-center justify-center text-[10px] font-bold">EB</div>
+<div class="h-6 w-6 rounded-full border border-white bg-primary/20 text-primary flex items-center justify-center text-[10px] font-bold">HR</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<code class="px-2 py-1 bg-background-light dark:bg-slate-800 rounded text-[11px] text-primary font-mono font-bold">TRX-771-K92</code>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-primary/10 rounded-lg text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">download</span>
+</button>
+<button class="p-2 hover:bg-primary/10 rounded-lg text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">policy</span>
+<div>
+<p class="font-semibold">Privacy_Policy_Update_2024.pdf</p>
+<p class="text-[10px] text-slate-400">Compliance • 4.8 MB</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-medium text-slate-600 dark:text-slate-300">Jan 15, 2024</td>
+<td class="px-6 py-4">
+<div class="flex -space-x-2">
+<div class="h-6 w-6 rounded-full border border-white bg-slate-800 text-white flex items-center justify-center text-[10px] font-bold">LG</div>
+<div class="h-6 w-6 rounded-full border border-white bg-primary/20 text-primary flex items-center justify-center text-[10px] font-bold">CTO</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<code class="px-2 py-1 bg-background-light dark:bg-slate-800 rounded text-[11px] text-primary font-mono font-bold">TRX-104-Z11</code>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-primary/10 rounded-lg text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">download</span>
+</button>
+<button class="p-2 hover:bg-primary/10 rounded-lg text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 bg-background-light dark:bg-slate-800/50 border-t border-primary/10 flex items-center justify-between">
+<p class="text-xs text-slate-500 font-medium">Showing 3 of 124 encrypted documents</p>
+<div class="flex gap-2">
+<button class="px-3 py-1 rounded border border-primary/20 text-xs font-bold hover:bg-primary/10 transition-colors">Previous</button>
+<button class="px-3 py-1 rounded bg-primary text-white text-xs font-bold shadow-sm">Next</button>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-center justify-center p-8 text-center bg-primary/5 rounded-2xl border-2 border-dashed border-primary/20">
+<span class="material-symbols-outlined text-4xl text-primary mb-3">lock_reset</span>
+<h3 class="text-lg font-bold mb-1">Zero-Knowledge Storage</h3>
+<p class="text-sm text-slate-500 max-w-md mx-auto">Only authorized key holders can decrypt these files. Even system administrators cannot access your sensitive document data.</p>
+</div>
+</section>
+</main>
+<footer class="px-4 lg:px-40 py-6 border-t border-primary/10 bg-white dark:bg-slate-900/50 mt-12">
+<div class="flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-[11px] text-slate-500 font-medium flex items-center gap-1 uppercase tracking-widest">
+<span class="material-symbols-outlined text-[14px]">verified_user</span>
+                    Enterprise Grade Security Active
+                </p>
+<div class="flex gap-6 text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+<a class="hover:text-primary" href="#">Compliance Reports</a>
+<a class="hover:text-primary" href="#">Encryption Standards</a>
+<a class="hover:text-primary" href="#">Audit Framework</a>
+</div>
+</div>
+</footer>
+</div>
+</body></html>
