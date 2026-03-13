@@ -160,7 +160,7 @@ export default function TemplatesPage() {
                       {template.category}
                    </div>
                    {index < 2 && (
-                     <div className="absolute top-3 right-3 bg-secondary text-white px-2 py-1 rounded-lg text-[8px] font-bold uppercase tracking-widest shadow-lg flex items-center gap-1">
+                     <div className="absolute top-3 right-3 bg-forest text-white px-2 py-1 rounded-lg text-[8px] font-bold uppercase tracking-widest shadow-lg flex items-center gap-1">
                         <Sparkles className="size-2.5" /> Featured
                      </div>
                    )}

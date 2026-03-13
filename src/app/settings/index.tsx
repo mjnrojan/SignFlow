@@ -113,7 +113,7 @@ export default function SettingsPage() {
                            {user?.name.charAt(0)}
                          </AvatarFallback>
                        </Avatar>
-                       <button className="absolute bottom-0 right-0 p-2 bg-secondary text-white rounded-full shadow-lg hover:scale-110 active:scale-90 transition-all border-2 border-background">
+                       <button className="absolute bottom-0 right-0 p-2 bg-forest text-white rounded-full shadow-lg hover:scale-110 active:scale-90 transition-all border-2 border-background">
                          <Camera className="size-4" />
                        </button>
                     </div>

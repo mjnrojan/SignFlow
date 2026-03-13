@@ -150,7 +150,7 @@ export default function Dashboard() {
           title={t('dashboard.quickActions.useTemplateTitle')} 
           subtitle={t('dashboard.quickActions.useTemplateSub')} 
           icon={Layers} 
-          color="bg-secondary" 
+          color="bg-forest" 
           onClick={() => navigate('/templates')}
         />
       </div>

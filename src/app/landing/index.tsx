@@ -150,8 +150,8 @@ export default function LandingPage() {
               
               {/* Step 2: Edit */}
               <div className="relative z-10 flex flex-col items-center gap-6 group">
-                <div className="w-24 h-24 rounded-2xl bg-secondary flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform overflow-hidden relative border border-primary/20">
-                  <FileText className="w-10 h-10 text-primary" />
+                <div className="w-24 h-24 rounded-2xl bg-forest flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform overflow-hidden relative border border-forest/20">
+                  <FileText className="w-10 h-10 text-white" />
                   <div className="absolute bottom-2 right-2 bg-primary transform rotate-12 p-1 rounded-sm shadow-md text-primary-foreground">
                     <PenTool className="w-4 h-4" />
                   </div>
