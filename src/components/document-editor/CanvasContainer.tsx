@@ -14,13 +14,15 @@ interface CanvasContainerProps {
   activeFieldId?: string | null;
   onSelectField: (id: string) => void;
   onRemoveField: (id: string) => void;
+  onUpdateField?: (id: string, updates: any) => void;
 }
 
-export function CanvasContainer({ fileUrl, fields, activeFieldId, onSelectField, onRemoveField }: CanvasContainerProps) {
+export function CanvasContainer({ fileUrl, fields, activeFieldId, onSelectField, onRemoveField, onUpdateField }: CanvasContainerProps) {
   const { getRecipientById } = useRecipientStore();
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [scale, setScale] = useState<number>(1.0);
+  const [pageDimensions, setPageDimensions] = useState({ width: 0, height: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
 
@@ -32,6 +34,13 @@ export function CanvasContainer({ fileUrl, fields, activeFieldId, onSelectField,
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
     setPageNumber(1);
+  };
+
+  const onPageLoadSuccess = (page: any) => {
+    setPageDimensions({
+      width: page.width || pageRef.current?.offsetWidth || 0,
+      height: page.height || pageRef.current?.offsetHeight || 0
+    });
   };
 
   const handleZoom = (direction: 'in' | 'out') => {
@@ -108,6 +117,7 @@ export function CanvasContainer({ fileUrl, fields, activeFieldId, onSelectField,
               pageNumber={pageNumber} 
               scale={scale} 
               inputRef={pageRef}
+              onLoadSuccess={onPageLoadSuccess}
               className="relative shadow-lg ring-1 ring-border"
             />
           </Document>
@@ -127,8 +137,11 @@ export function CanvasContainer({ fileUrl, fields, activeFieldId, onSelectField,
                     active={field.id === activeFieldId}
                     onSelect={onSelectField}
                     onRemove={onRemoveField}
+                    onUpdate={onUpdateField}
                     color={recipient?.color}
                     recipientOrder={recipient?.order}
+                    containerWidth={pageDimensions.width}
+                    containerHeight={pageDimensions.height}
                   />
                 );
             })}

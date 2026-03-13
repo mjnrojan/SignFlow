@@ -9,8 +9,9 @@ interface DocumentState {
   setActiveDocument: (id: string | null) => void;
   addField: (field: IDocumentField) => void;
   removeField: (fieldId: string) => void;
-  updateFieldPosition: (fieldId: string, x: number, y: number, pageNumber: number) => void;
+  updateField: (fieldId: string, updates: Partial<IDocumentField>) => void;
   updateDocumentStatus: (documentId: string, status: DocumentStatus) => void;
+  addDocument: (document: IDocument) => void;
 }
 
 export const useDocumentStore = create<DocumentState>()(
@@ -52,23 +53,28 @@ export const useDocumentStore = create<DocumentState>()(
           }
         }
       }),
-    updateFieldPosition: (fieldId, x, y, pageNumber) =>
+    updateField: (fieldId, updates) =>
       set((state) => {
         if (state.activeDocument) {
           const field = state.activeDocument.fields.find(f => f.id === fieldId);
           if (field) {
-            field.position.x = x;
-            field.position.y = y;
-            field.position.pageNumber = pageNumber;
+            Object.assign(field, updates);
+            
+            // Handle nested position update if provided partially
+            if (updates.position) {
+              field.position = { ...field.position, ...updates.position };
+            }
           }
-          // Sync
+          
+          // Sync to master list
           const docIndex = state.documents.findIndex((d) => d.id === state.activeDocument!.id);
           if (docIndex !== -1) {
             const listField = state.documents[docIndex].fields.find(f => f.id === fieldId);
             if (listField) {
-              listField.position.x = x;
-              listField.position.y = y;
-              listField.position.pageNumber = pageNumber;
+              Object.assign(listField, updates);
+              if (updates.position) {
+                listField.position = { ...listField.position, ...updates.position };
+              }
             }
           }
         }
@@ -82,6 +88,10 @@ export const useDocumentStore = create<DocumentState>()(
             state.activeDocument.status = status;
           }
         }
+      }),
+    addDocument: (document) =>
+      set((state) => {
+        state.documents.unshift(document);
       }),
   }))
 );

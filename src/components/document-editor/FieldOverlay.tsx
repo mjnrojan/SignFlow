@@ -1,16 +1,42 @@
 import { PenTool, Hash, Calendar, Type, ShieldCheck, Trash2, Settings2 } from 'lucide-react';
 import { FieldType, type IDocumentField } from '@/types/document.types';
+import { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface FieldOverlayProps {
   field: IDocumentField;
   active: boolean;
   onSelect: (id: string) => void;
   onRemove: (id: string) => void;
+  onUpdate?: (id: string, updates: any) => void;
   color?: string;
   recipientOrder?: number;
+  containerWidth: number;
+  containerHeight: number;
 }
 
-export function FieldOverlay({ field, active, onSelect, onRemove, color = '#E8760A', recipientOrder = 1 }: FieldOverlayProps) {
+export function FieldOverlay({ 
+  field, 
+  active, 
+  onSelect, 
+  onRemove, 
+  onUpdate,
+  color = '#E8760A', 
+  recipientOrder = 1,
+  containerWidth,
+  containerHeight
+}: FieldOverlayProps) {
+  const { t } = useTranslation();
+  const [isResizing, setIsResizing] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const startPos = useRef({ x: 0, y: 0, width: 0, height: 0, initialX: 0, initialY: 0 });
+
+  // Calculate pixel values based on percentages and container size
+  const left = field.position.x * containerWidth;
+  const top = field.position.y * containerHeight;
+  const width = (field.position.width || 0.15) * containerWidth;
+  const height = (field.position.height || 0.08) * containerHeight;
+
   const getIcon = () => {
     switch (field.type) {
       case FieldType.SIGNATURE: return <PenTool className="size-3.5" />;
@@ -22,53 +48,129 @@ export function FieldOverlay({ field, active, onSelect, onRemove, color = '#E876
     }
   };
 
+  const handleResizeStart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsResizing(true);
+    startPos.current = { 
+      x: e.clientX, 
+      y: e.clientY, 
+      width: field.position.width || 0.15, 
+      height: field.position.height || 0.08,
+      initialX: field.position.x,
+      initialY: field.position.y
+    };
+  };
+
+  const handleDragStart = (e: React.MouseEvent) => {
+    if (isResizing) return;
+    e.stopPropagation();
+    onSelect(field.id);
+    setIsDragging(true);
+    startPos.current = { 
+      x: e.clientX, 
+      y: e.clientY, 
+      width: field.position.width || 0.15, 
+      height: field.position.height || 0.08,
+      initialX: field.position.x,
+      initialY: field.position.y
+    };
+  };
+
+  useEffect(() => {
+    const handleMove = (e: MouseEvent) => {
+      if (isResizing) {
+        const deltaX = (e.clientX - startPos.current.x) / containerWidth;
+        const deltaY = (e.clientY - startPos.current.y) / containerHeight;
+        
+        onUpdate?.(field.id, {
+          position: {
+            ...field.position,
+            width: Math.max(0.05, startPos.current.width + deltaX),
+            height: Math.max(0.03, startPos.current.height + deltaY)
+          }
+        });
+      } else if (isDragging) {
+        const deltaX = (e.clientX - startPos.current.x) / containerWidth;
+        const deltaY = (e.clientY - startPos.current.y) / containerHeight;
+        
+        onUpdate?.(field.id, {
+          position: {
+            ...field.position,
+            x: Math.max(0, Math.min(1 - (field.position.width || 0.15), startPos.current.initialX + deltaX)),
+            y: Math.max(0, Math.min(1 - (field.position.height || 0.08), startPos.current.initialY + deltaY))
+          }
+        });
+      }
+    };
+
+    const handleUp = () => {
+      setIsResizing(false);
+      setIsDragging(false);
+    };
+
+    if (isResizing || isDragging) {
+      window.addEventListener('mousemove', handleMove);
+      window.addEventListener('mouseup', handleUp);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMove);
+      window.removeEventListener('mouseup', handleUp);
+    };
+  }, [isResizing, isDragging, containerWidth, containerHeight, field, onUpdate]);
+
   return (
     <div 
-      onClick={(e) => { e.stopPropagation(); onSelect(field.id); }}
+      onMouseDown={handleDragStart}
       className={`
         absolute pointer-events-auto cursor-move select-none group transition-all duration-200
-        px-4 py-2.5 rounded-xl border-2 flex items-center gap-2.5 shadow-sm min-w-[120px]
+        rounded-xl border-2 flex items-center justify-center shadow-sm
         ${active 
           ? 'bg-card border-primary shadow-xl ring-4 ring-primary/5 z-20 scale-[1.02]' 
           : 'border-slate-300 dark:border-slate-700 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-dashed z-10'
         }
+        ${isDragging || isResizing ? 'opacity-80 scale-105' : ''}
       `}
       style={{ 
-        left: field.position.x, 
-        top: field.position.y,
+        left, 
+        top,
+        width,
+        height,
         borderColor: active ? color : undefined 
       }}
     >
-      {/* Icon & Label */}
-      <div 
-        className={`shrink-0 p-1.5 rounded-lg transition-colors ${active ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'}`}
-        style={{ backgroundColor: active ? color : undefined }}
-      >
-        {getIcon()}
-      </div>
-      
-      <div className="flex flex-col flex-1 min-w-0">
-        <span className={`text-[10px] font-bold uppercase tracking-widest leading-none ${active ? 'text-primary' : 'text-muted-foreground'}`} style={{ color: active ? color : undefined }}>
-          {field.type}
-        </span>
-        <span className="text-[9px] text-muted-foreground truncate opacity-70">
-          Required Field
-        </span>
+      {/* Icon & Label Container */}
+      <div className="flex items-center gap-2 px-3 w-full h-full overflow-hidden">
+        <div 
+          className={`shrink-0 p-1.5 rounded-lg transition-colors ${active ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}
+          style={{ backgroundColor: active ? color : undefined }}
+        >
+          {getIcon()}
+        </div>
+        
+        <div className="flex flex-col flex-1 min-w-0">
+          <span className={`text-[10px] font-bold uppercase tracking-widest leading-none truncate ${active ? 'text-primary' : 'text-muted-foreground'}`} style={{ color: active ? color : undefined }}>
+            {t(`editor.fields.${field.type.toLowerCase()}`)}
+          </span>
+          <span className="text-[8px] text-muted-foreground truncate opacity-70">
+            {t('editor.properties.required')}
+          </span>
+        </div>
       </div>
 
       {/* Action Buttons for Active Field */}
-      {active && (
+      {active && !isDragging && !isResizing && (
         <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-card border border-border shadow-2xl rounded-lg py-1 px-1.5 flex items-center gap-1 animate-in zoom-in-90 fade-in duration-200 z-50">
           <button 
-            onClick={(e) => { e.stopPropagation(); }}
+            onMouseDown={(e) => e.stopPropagation()}
             className="p-1.5 hover:bg-muted rounded text-muted-foreground hover:text-foreground transition-colors"
           >
             <Settings2 className="size-3.5" />
           </button>
           <div className="w-px h-4 bg-border/50 mx-0.5"></div>
           <button 
-            onClick={(e) => { e.stopPropagation(); onRemove(field.id); }}
-            className="p-1.5 hover:bg-red-500/10 rounded text-muted-foreground hover:text-red-500 transition-colors"
+            onMouseDown={(e) => { e.stopPropagation(); onRemove(field.id); }}
+            className="p-1.5 hover:bg-destructive/10 rounded text-muted-foreground hover:text-destructive transition-colors"
           >
             <Trash2 className="size-3.5" />
           </button>
@@ -83,13 +185,22 @@ export function FieldOverlay({ field, active, onSelect, onRemove, color = '#E876
         {recipientOrder}
       </div>
 
-      {/* Resize Handles (Visual) */}
+      {/* Resize Handle */}
+      {active && (
+        <div 
+          onMouseDown={handleResizeStart}
+          className="absolute bottom-0 right-0 size-4 cursor-nwse-resize flex items-center justify-center group/resize"
+        >
+          <div className="size-2.5 bg-background border-2 border-primary rounded-full group-hover/resize:scale-125 transition-transform"></div>
+        </div>
+      )}
+      
+      {/* Visual Corners */}
       {active && (
         <>
-          <div className="absolute -top-1.5 -left-1.5 size-3 bg-white border-2 border-primary rounded-full shadow-sm"></div>
-          <div className="absolute -top-1.5 -right-1.5 size-3 bg-white border-2 border-primary rounded-full shadow-sm"></div>
-          <div className="absolute -bottom-1.5 -left-1.5 size-3 bg-white border-2 border-primary rounded-full shadow-sm"></div>
-          <div className="absolute -bottom-1.5 -right-1.5 size-3 bg-white border-2 border-primary rounded-full shadow-sm"></div>
+          <div className="absolute top-0 left-0 size-1.5 bg-primary/20 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute top-0 right-0 size-1.5 bg-primary/20 rounded-full translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 left-0 size-1.5 bg-primary/20 rounded-full -translate-x-1/2 translate-y-1/2"></div>
         </>
       )}
     </div>

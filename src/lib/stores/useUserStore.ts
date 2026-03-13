@@ -7,6 +7,7 @@ interface UserState {
   isAuthenticated: boolean;
   login: () => void;
   logout: () => void;
+  updateUser: (updates: Partial<IUser>) => void;
 }
 
 export const useUserStore = create<UserState>((set) => ({
@@ -14,4 +15,7 @@ export const useUserStore = create<UserState>((set) => ({
   isAuthenticated: false,
   login: () => set({ user: MOCK_USER, isAuthenticated: true }),
   logout: () => set({ user: null, isAuthenticated: false }),
+  updateUser: (updates) => set((state) => ({ 
+    user: state.user ? { ...state.user, ...updates } : null 
+  })),
 }));

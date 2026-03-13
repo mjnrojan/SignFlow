@@ -1,5 +1,7 @@
-import { useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useCallback, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTemplateStore } from '@/lib/stores/useTemplateStore';
+import { useDocumentStore } from '@/lib/stores/useDocumentStore';
 import { 
   UploadCloud, 
   FileText, 
@@ -15,11 +17,28 @@ import {
 
 export default function DocumentUploadPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const templateId = searchParams.get('template');
+  const { getTemplateById } = useTemplateStore();
+  const { addDocument } = useDocumentStore();
+  
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isDragOver, setIsDragOver] = useState(false);
+
+  useEffect(() => {
+    if (templateId) {
+      const template = getTemplateById(templateId);
+      if (template) {
+        setTitle(template.name);
+        // Simulate a dummy file for the template
+        const dummyFile = new File([""], "template.pdf", { type: "application/pdf" });
+        setFile(dummyFile);
+      }
+    }
+  }, [templateId, getTemplateById]);
 
   const onDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -60,9 +79,20 @@ export default function DocumentUploadPage() {
         progress = 100;
         clearInterval(interval);
         setTimeout(() => {
+          const newId = `doc_${Math.random().toString(36).substr(2, 9)}`;
           // In a real app, we'd add to store here
-          // For now, let's just navigate to the next step
-          navigate('/dashboard'); // Temporarily back to dashboard until editor is ready
+          addDocument({
+            id: newId,
+            title,
+            status: 'DRAFT' as any,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            fileUrl: '/mock-pdfs/sample.pdf',
+            authorId: 'user_1',
+            recipients: [],
+            fields: []
+          });
+          navigate(`/documents/${newId}/edit`);
         }, 800);
       }
       setUploadProgress(progress);

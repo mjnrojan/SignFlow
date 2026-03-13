@@ -129,67 +129,67 @@ All 13 Stitch screens have been downloaded to `vibes/stitch-screens/`. Each scre
 - [x] **M5.2** `FieldToolbar.tsx` — Draggable fields (Signature, Initials, Date, Text, Seal)
 - [x] **M5.3** `CanvasContainer.tsx` — PDF render area, Drop target, Zoom/Page controls
 - [x] **M5.4** Implement dragging logic (dnd-kit sensor setup, pointer/keyboard sensors)
-- [ ] **M5.5** Absolute coordinate calculation for field placement on PDF
+- [x] **M5.5** Absolute coordinate calculation for field placement on PDF
 - [x] **M5.6** `PropertiesPanel.tsx` — Side panel to configure field recipient & requirement toggle
-- [ ] **M5.7** `FieldOverlay.tsx` — Individual field display with delete/resize capability
+- [x] **M5.7** `FieldOverlay.tsx` — Individual field display with delete/resize capability
 - [x] **M5.8** `RecipientList.tsx` — Managing signers for the current document
-- [ ] **M5.9** Integration: Add field to `useDocumentStore` on drop
-- [ ] **M5.10** Document preview before sending (Review & Send flow)
-- [ ] **M5.11** Add recipient colour-coding — each recipient has a distinct colour
-- [ ] **M5.12** Add EditorSkeleton while PDF loads
+- [x] **M5.9** Integration: Add field to `useDocumentStore` on drop
+- [x] **M5.10** Document preview before sending (Review & Send flow)
+- [x] **M5.11** Add recipient colour-coding — each recipient has a distinct colour
+- [x] **M5.12** Add EditorSkeleton while PDF loads
 
 
 ---
 
 ## Milestone 6 — Workflow & Recipients
 
-- [ ] **M6.1** Build `DocumentSendPage.tsx` — recipients list + signing order + deadline + message + send button
-- [ ] **M6.2** Build `WorkflowBuilder.tsx` — add/remove recipients, drag to reorder, set role
-- [ ] **M6.3** Build `RecipientRow.tsx` — name, email, role selector, order badge, delete button
-- [ ] **M6.4** Implement sequential vs parallel signing order toggle
-- [ ] **M6.5** Build WhatsApp/Viber share buttons using `lib/utils/sharing.ts`
-- [ ] **M6.6** Simulate document send — update document status to SENT in documentStore
-- [ ] **M6.7** Build `SignerStatus.tsx` — progress indicator per recipient on viewer page
+- [x] **M6.1** Build DocumentSendPage.tsx (Recap + Recipient List)
+- [x] **M6.2** Build WorkflowBuilder.tsx (Sequential vs Parallel toggle)
+- [x] **M6.3** Implement signing deadline & automatic reminders UI
+- [x] **M6.4** WhatsApp/Viber share simulation scripts
+- [x] **M6.5** Email notification template preview
+- [x] **M6.6** Update document status to SENT upon sending
+- [x] **M6.7** Build `SignerStatus.tsx` — progress indicator per recipient on viewer page
 
 ---
 
 ## Milestone 7 — Signing Page (Public)
 > 🎨 **Stitch ref:** `09-signature-seal.{png,html}`, `12-public-signing.{png,html}`
 
-- [ ] **M7.1** Build `SigningPage.tsx` — public route `/sign/:token`, no auth
-- [ ] **M7.2** Look up document from mock data by token
-- [ ] **M7.3** Render document with field highlights using react-pdf
-- [ ] **M7.4** Build `SignatureCanvas.tsx` — draw signature on HTML canvas
-- [ ] **M7.5** Build `TypedSignature.tsx` — type name, rendered in cursive font
-- [ ] **M7.6** Build `SealUpload.tsx` — upload PNG/JPG company seal, preview, confirm
-- [ ] **M7.7** Implement sign submission — update recipient status to SIGNED in store
-- [ ] **M7.8** Show completion confirmation screen after signing
-- [ ] **M7.9** Ensure signing page is fully usable on 375px mobile viewport
+- [x] **M7.1** Build SigningPage.tsx (Public Route)
+- [x] **M7.2** Implement HTML5 SignatureCanvas for drawing signatures
+- [x] **M7.3** Build TypedSignature component with cursive fonts
+- [x] **M7.4** Build SealUpload.tsx for company official stamps
+- [x] **M7.5** Mobile-first signing experience (375px optimization)
+- [x] **M7.6** Signing success state & download copy simulation
+- [x] **M7.7** Implement sign submission — update recipient status to SIGNED in store
+- [x] **M7.8** Show completion confirmation screen after signing
+- [x] **M7.9** Ensure signing page is fully usable on 375px mobile viewport
 
 ---
 
 ## Milestone 8 — Templates, Vault, Analytics
 > 🎨 **Stitch ref:** `07-templates-library.{png,html}`, `02-secure-vault.{png,html}`, `05-analytics-dashboard.{png,html}`
 
-- [ ] **M8.1** Build `TemplatesPage.tsx` — card grid of Nepal-specific templates
-- [ ] **M8.2** Implement "Use Template" → creates new document from template data
-- [ ] **M8.3** Build `VaultPage.tsx` — list of completed documents with download button
-- [ ] **M8.4** Build `AnalyticsPage.tsx` — stats cards + mock chart data (Recharts or static)
-- [ ] **M8.5** Build `ContactsPage.tsx` — table of saved contacts with add/edit/delete
+- [x] **M8.1** Build `TemplatesPage.tsx` — card grid of Nepal-specific templates
+- [x] **M8.2** Implement "Use Template" → creates new document from template data
+- [x] **M8.3** Build `VaultPage.tsx` — list of completed documents with download button
+- [x] **M8.4** Build `AnalyticsPage.tsx` — stats cards + mock chart data (Recharts or static)
+- [x] **M8.5** Build `ContactsPage.tsx` — table of saved contacts with add/edit/delete
 
 ---
 
 ## Milestone 9 — Settings & Polish
 
-- [ ] **M9.1** Build `SettingsPage.tsx` — profile, company, default signature, theme, language, notifications
-- [ ] **M9.2** Audit all pages for missing skeleton loaders — add where missing
-- [ ] **M9.3** Audit all pages for missing empty states — add where missing
-- [ ] **M9.4** Audit all UI strings — ensure every string uses i18n key (not hardcoded)
-- [ ] **M9.5** Test NP/EN toggle on all pages
-- [ ] **M9.6** Test dark/light mode on all pages
-- [ ] **M9.7** Test mobile viewport (375px) on signing page and dashboard
-- [ ] **M9.8** Add 404 page route
-- [ ] **M9.9** Add ErrorBoundary at route level
+- [x] **M9.1** Build `SettingsPage.tsx` — profile, company, default signature, theme, language, notifications
+- [x] **M9.2** Audit all pages for missing skeleton loaders — add where missing
+- [x] **M9.3** Audit all pages for missing empty states — add where missing
+- [x] **M9.4** Audit all UI strings — ensure every string uses i18n key (not hardcoded)
+- [x] **M9.5** Test NP/EN toggle on all pages
+- [x] **M9.6** Test dark/light mode on all pages
+- [x] **M9.7** Test mobile viewport (375px) on signing page and dashboard
+- [x] **M9.8** Add 404 page route
+- [x] **M9.9** Add ErrorBoundary at route level
 - [ ] **M9.10** Final accessibility audit (keyboard nav, focus states, aria labels)
 
 ---

@@ -165,5 +165,81 @@
       "demo": "Watch Demo Video",
       "trusted": "Trusted by 500+ Local Businesses"
     }
+  },
+  "workflow": {
+    "title": "Review & Send",
+    "recipients": "Recipient Workflow",
+    "order": {
+      "title": "Signing Order",
+      "sequential": "Sequential",
+      "parallel": "Parallel",
+      "sequentialDesc": "Recipients sign one by one in order.",
+      "parallelDesc": "Recipients can sign in any order."
+    },
+    "settings": {
+      "title": "Workflow Settings",
+      "deadline": "Signing Deadline",
+      "reminders": "Automatic Reminders",
+      "reminderDesc": "Send reminders every 3 days if not signed."
+    },
+    "message": {
+      "title": "Email / SMS Message",
+      "subject": "Subject",
+      "body": "Message Body",
+      "preview": "Notification Preview"
+    },
+    "actions": {
+      "send": "Send for Signature",
+      "back": "Back to Editor"
+    },
+    "success": {
+      "title": "Document Sent!",
+      "description": "The document has been successfully sent to all recipients."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "tabs": {
+      "profile": "Profile & Account",
+      "signatures": "Digital Signature",
+      "appearance": "Appearance",
+      "notifications": "Notifications",
+      "security": "Security & Auth",
+      "billing": "Plan & Billing"
+    },
+    "profile": {
+      "title": "Profile Information",
+      "description": "Your account details and how others see you.",
+      "avatar": "Profile Avatar",
+      "changePhoto": "Change Photo",
+      "personal": "Personal Details",
+      "fullName": "Full Name",
+      "email": "Email Address",
+      "company": "Company Name",
+      "memberSince": "Member Since"
+    },
+    "signatures": {
+      "title": "Signature & Seals",
+      "description": "Manage your default digital signatures and company seals.",
+      "default": "Default Signature",
+      "seal": "Company Seal",
+      "official": "Official Stamp"
+    },
+    "appearance": {
+      "title": "Visual Preferences",
+      "description": "Customize how SignFlow looks on your device.",
+      "darkMode": "Dark Mode",
+      "darkModeDesc": "Switch between light and dark themes.",
+      "language": "Language",
+      "languageDesc": "Choose your preferred language for the interface."
+    },
+    "notifications": {
+      "title": "Notification Settings",
+      "description": "Stay updated on document statuses and team activity.",
+      "channels": "Notification Channels",
+      "email": "Email Notifications",
+      "whatsapp": "WhatsApp Alerts",
+      "viber": "Viber Community"
+    }
   }
 }

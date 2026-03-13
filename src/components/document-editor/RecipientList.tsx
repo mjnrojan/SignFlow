@@ -9,6 +9,7 @@ import {
   Info
 } from 'lucide-react';
 import { useRecipientStore } from '@/lib/stores/useRecipientStore';
+import { useTranslation } from 'react-i18next';
 
 interface RecipientListProps {
   selectedRecipientId: string | null;
@@ -16,11 +17,12 @@ interface RecipientListProps {
 }
 
 export function RecipientList({ selectedRecipientId, onSelectRecipient }: RecipientListProps) {
+  const { t } = useTranslation();
   const { recipients, removeRecipient } = useRecipientStore();
 
   const handleAddRecipient = () => {
     // This could open a modal in a real app
-    alert('Add Recipient feature would open a modal here');
+    alert(t('common.comingSoon'));
   };
 
   return (
@@ -30,13 +32,17 @@ export function RecipientList({ selectedRecipientId, onSelectRecipient }: Recipi
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <Users className="size-5 text-primary" />
-            <h3 className="text-sm font-bold font-['Fraunces']">Manage Recipients</h3>
+            <h3 className="text-sm font-bold font-['Fraunces'] text-foreground">
+              {t('editor.recipients.title')}
+            </h3>
           </div>
           <span className="text-[10px] font-bold text-muted-foreground bg-muted px-2 py-0.5 rounded-full uppercase">
-            {recipients.length} Total
+            {recipients.length} {t('common.total', { defaultValue: 'Total' })}
           </span>
         </div>
-        <p className="text-xs text-muted-foreground font-['Syne']">Define who needs to sign or view this document.</p>
+        <p className="text-xs text-muted-foreground font-['Syne']">
+          Define who needs to sign or view this document.
+        </p>
       </div>
 
       {/* Recipient Cards */}
@@ -75,7 +81,7 @@ export function RecipientList({ selectedRecipientId, onSelectRecipient }: Recipi
                 </button>
                 <button 
                   onClick={(e) => { e.stopPropagation(); removeRecipient(recipient.id); }}
-                  className="p-1.5 hover:bg-red-50 rounded-lg text-muted-foreground hover:text-red-500"
+                  className="p-1.5 hover:bg-destructive/10 rounded-lg text-muted-foreground hover:text-destructive"
                 >
                   <Trash2 className="size-4" />
                 </button>
@@ -85,7 +91,9 @@ export function RecipientList({ selectedRecipientId, onSelectRecipient }: Recipi
             <div className="mt-4 flex items-center justify-between border-t border-border/50 pt-3">
                <div className="flex items-center gap-1.5">
                   <Shield className="size-3 text-primary" />
-                  <span className="text-[10px] font-bold text-primary uppercase tracking-widest">{recipient.role}</span>
+                  <span className="text-[10px] font-bold text-primary uppercase tracking-widest">
+                    {t(`editor.recipients.role.${recipient.role.toLowerCase()}`)}
+                  </span>
                </div>
                <div className="flex items-center gap-2">
                   <span className="text-[10px] text-muted-foreground">Order: {recipient.order}</span>
@@ -102,14 +110,18 @@ export function RecipientList({ selectedRecipientId, onSelectRecipient }: Recipi
            <div className="size-8 bg-primary rounded-full flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform">
               <UserPlus className="size-4" />
            </div>
-           <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Add New Recipient</span>
+           <span className="text-[10px] font-bold text-primary uppercase tracking-widest">
+            {t('editor.recipients.add')}
+           </span>
         </button>
       </div>
 
       {/* Footer Instructions */}
       <div className="p-6 bg-muted/30 border-t border-border mt-auto">
         <div className="flex gap-3 text-muted-foreground">
-          <Info className="size-5 shrink-0 text-primary opacity-50" />
+          <span className="shrink-0 p-1.5 bg-primary/10 rounded-lg text-primary">
+            <Info className="size-4" />
+          </span>
           <p className="text-[10px] font-['Syne'] leading-relaxed">
             Recipients will receive an email and SMS (if configured) to sign or view the document in the specified order.
           </p>

@@ -5,61 +5,52 @@ Quick-reference list of what needs to happen next. Update this file as you work.
 
 ---
 
-## 🟢 Recently Completed — Milestone 0 ✅
+## 🟢 Recently Completed — Milestones 0 to 5 ✅
 
-- [x] Scaffold Vite + React + TypeScript project
-- [x] Install all dependencies
-- [x] CSS variables + dark mode tokens + Google Fonts
-- [x] All TypeScript interfaces in `src/types/`
-- [x] Mock data: 12 documents, 12 recipients, 8 templates, 12 audit logs, 1 user
-- [x] Zustand stores: `useDocumentStore`, `useUserStore`, `useUIStore`
-- [x] TanStack Query hooks: `useDocuments`, `useDocument`, `useTemplates`
-- [x] Utility files: `document-status.ts`, `date.ts`, `sharing.ts`, `constants.ts`
-- [x] Dark mode wired via `ThemeProvider` in `App.tsx`
-- [x] Routes refactored to `React.lazy()` + `Suspense` with `PageSkeleton` fallback
-- [x] PDF.js worker + i18n configured
-- [x] All 13 Stitch design screens downloaded
-- [x] shadcn/ui components installed
+- [x] **M0 - M1:** Project Scaffolding, Layout & Navigation
+- [x] **M2 - M3:** Auth Screens, Landing Page & Dashboard Implementation
+- [x] **M4:** Document Management (List, Statuses, Search, Upload)
+- [x] **M5 (CORE):** Document Editor
+  - [x] Draggable fields (Signature, Date, Text, etc.)
+  - [x] Percentage-based absolute coordinate positioning
+  - [x] Field resizing and manual drag adjustment
+  - [x] Recipient tagging and color-coding
+  - [x] Properties panel for field configuration
+  - [x] Editor Skeleton loading state (800ms simulation)
 
 ---
 
-## 🔴 Current — Milestone 1 (Layout & Navigation)
+## 🔴 Current — Milestone 6 (Workflow & Recipients)
 
-> 🎨 **Stitch ref:** `10-layout-navigation.{png,html}`
+> 🎨 **Focus:** Sending flow and recipient management.
 
-- [x] Split `AppLayout.tsx` → separate `Sidebar.tsx`, `TopNavbar.tsx`, `PageHeader.tsx`
-- [x] Build `Sidebar.tsx` with all nav links (Dashboard, Documents, Templates, Analytics, Vault, Contacts, Settings)
-- [x] Build `TopNavbar.tsx` with search, notifications, language toggle, theme toggle, user avatar
-- [x] Build `LanguageToggle.tsx` — NP/EN switch wired to `useUIStore` + i18next
-- [x] Build `ThemeToggle.tsx` — light/dark switch wired to `useUIStore`
-- [x] Build `PageHeader.tsx` — reusable title + breadcrumbs + actions slot
-- [x] Build `AuthLayout.tsx` — centered card layout for login/signup
-- [x] Build `EmptyState.tsx` — icon + title + description + optional CTA
-- [x] Build remaining skeletons: `CardGridSkeleton`, `EditorSkeleton`, `ViewerSkeleton`
-- [x] Implement mock auth guard — redirect to `/login` if not authenticated
+- [ ] **M6.1** Build `DocumentSendPage.tsx` — Recap of document + recipient list
+- [ ] **M6.2** Build `WorkflowBuilder.tsx` — Sequential vs Parallel signing order toggle
+- [ ] **M6.3** Implement signing deadline and automatic reminder settings
+- [ ] **M6.4** WhatsApp/Viber share simulation for sent documents
+- [ ] **M6.5** Email notification template preview
+- [ ] **M6.6** Update document status to `SENT` upon completion of workflow
 
 ---
 
-## 🟢 Recently Completed — Milestones 2 & 3 ✅
-...
-- [x] `LandingPage.tsx` — hero, features, CTA
-- [x] `LoginPage.tsx` — email/password form (mock auth)
-- [x] `SignupPage.tsx` — registration form
-- [x] Rebuild `DashboardPage.tsx` using `useDocuments` hook + typed props
-- [x] Recent Documents, Activity Feed, Quick Actions, Skeleton loader
+## 🟡 Next Up — Milestone 7 (Public Signing Page)
+
+> 🎨 **Stitch ref:** `09-signature-seal.{png,html}`, `12-public-signing.{png,html}`
+
+- [ ] **M7.1** Build `SigningPage.tsx` (Public Route: `/sign/:token`)
+- [ ] **M7.2** Implement HTML5 `SignatureCanvas` for drawing signatures
+- [ ] **M7.3** Build `TypedSignature` component with cursive fonts
+- [ ] **M7.4** Build `SealUpload.tsx` for company official stamps
+- [ ] **M7.5** Mobile-first signing experience (375px optimization)
 
 ---
 
-## 🔵 Deferred to V2
+## 🔵 Upcoming Milestones
 
-- [ ] Nepal BS calendar date display
-- [ ] eSewa / Khalti payment mock
-- [ ] Citizenship OTP verification mock
-- [ ] AI contract clause analysis
-- [ ] AI signature field auto-detection
-- [ ] Document expiry + renewal alerts
-- [ ] Approval workflow engine
-- [ ] Real PDF generation (pdf-lib)
+- [ ] **Milestone 8:** Templates Library, Secure Vault & Analytics Dashboard
+- [ ] **Milestone 8.5:** Contacts Management (Nepal-specific names/addresses)
+- [ ] **Milestone 9:** Settings, Error Boundaries & Final i18n Audit
+- [ ] **Milestone 10:** Demo Preparation & Vercel Deployment
 
 ---
 
@@ -67,6 +58,6 @@ Quick-reference list of what needs to happen next. Update this file as you work.
 
 - [ ] Confetti animation on document completion
 - [ ] "Time saved vs paper" counter on Dashboard
-- [ ] Onboarding tour for first-time users
-- [ ] Document comparison view
-- [ ] Bulk send
+- [ ] Citizenship/NID placeholder verification
+- [ ] Bulk send capability
+- [ ] eSewa/Khalti integration mocks

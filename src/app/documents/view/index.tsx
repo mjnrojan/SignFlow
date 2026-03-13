@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 import { useDocumentStore } from '@/lib/stores/useDocumentStore';
 import { StatusBadge } from '@/components/shared/StatusBadge';
+import { useRecipientStore } from '@/lib/stores/useRecipientStore';
+import { SignerStatus } from '@/components/shared/SignerStatus';
 import { AuditPanel } from '@/components/viewer/AuditPanel';
 import { ShareModal } from '@/components/shared/ShareModal';
 
@@ -23,6 +25,7 @@ export default function DocumentViewerPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { setActiveDocument, activeDocument } = useDocumentStore();
+  const { recipients } = useRecipientStore();
   const [showAudit, setShowAudit] = useState(false);
   const [showShare, setShowShare] = useState(false);
 
@@ -122,59 +125,68 @@ export default function DocumentViewerPage() {
                     Prepare for Signing <ChevronRight className="size-4" />
                  </button>
               </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                 <div className="lg:col-span-2 space-y-8">
+                    {/* View Section */}
+                    <div className="relative group">
+                      {/* Mock Sheet */}
+                      <div className="aspect-[1/1.4] bg-white dark:bg-slate-900 rounded-lg shadow-2xl border border-border relative p-12 overflow-hidden mx-auto pointer-events-none select-none">
+                        {/* Watermark */}
+                        <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] rotate-[-45deg] pointer-events-none uppercase font-bold text-6xl tracking-[1em] select-none">
+                          Preview Only • SignFlow Nepal
+                        </div>
 
-              {/* View Section */}
-              <div className="relative group">
-                {/* Mock Sheet */}
-                <div className="aspect-[1/1.4] bg-white dark:bg-slate-900 rounded-lg shadow-2xl border border-border relative p-12 overflow-hidden mx-auto pointer-events-none select-none">
-                  {/* Watermark */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] rotate-[-45deg] pointer-events-none uppercase font-bold text-6xl tracking-[1em] select-none">
-                    Preview Only • SignFlow Nepal
-                  </div>
+                        {/* Header Decoration */}
+                        <div className="w-24 h-2 bg-slate-100 dark:bg-slate-800 rounded-full mb-8"></div>
+                        
+                        {/* Content Lines */}
+                        <div className="space-y-4">
+                          <div className="h-4 bg-slate-50 dark:bg-slate-800/50 rounded w-1/3 mb-10"></div>
+                          <div className="h-3 bg-slate-50 dark:bg-slate-800/30 rounded w-full"></div>
+                          <div className="h-3 bg-slate-50 dark:bg-slate-800/30 rounded w-full"></div>
+                          <div className="h-3 bg-slate-50 dark:bg-slate-800/30 rounded w-5/6"></div>
+                          <div className="h-3 bg-slate-50 dark:bg-slate-800/30 rounded w-full mt-8"></div>
+                          <div className="h-3 bg-slate-50 dark:bg-slate-800/30 rounded w-4/5"></div>
 
-                  {/* Header Decoration */}
-                  <div className="w-24 h-2 bg-slate-100 dark:bg-slate-800 rounded-full mb-8"></div>
-                  
-                  {/* Content Lines */}
-                  <div className="space-y-4">
-                    <div className="h-4 bg-slate-50 dark:bg-slate-800/50 rounded w-1/3 mb-10"></div>
-                    <div className="h-3 bg-slate-50 dark:bg-slate-800/30 rounded w-full"></div>
-                    <div className="h-3 bg-slate-50 dark:bg-slate-800/30 rounded w-full"></div>
-                    <div className="h-3 bg-slate-50 dark:bg-slate-800/30 rounded w-5/6"></div>
-                    <div className="h-3 bg-slate-50 dark:bg-slate-800/30 rounded w-full mt-8"></div>
-                    <div className="h-3 bg-slate-50 dark:bg-slate-800/30 rounded w-4/5"></div>
+                          {/* Signature Fields (Abstract) */}
+                          <div className="mt-20 flex justify-between gap-10">
+                             <div className="flex-1 space-y-4">
+                                <div className="h-10 bg-primary/5 border border-dashed border-primary/20 rounded flex items-center justify-center text-[10px] font-bold text-primary/40 uppercase tracking-widest">Awaiting Signature</div>
+                                <div className="h-px bg-slate-100 dark:bg-slate-800 w-full"></div>
+                                <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Party A: Aarav Sharma</p>
+                             </div>
+                             <div className="flex-1 space-y-4">
+                                <div className="h-10 bg-muted border border-dashed border-border rounded flex items-center justify-center text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">Party B: Bikash Tamang</div>
+                                <div className="h-px bg-slate-100 dark:bg-slate-800 w-full"></div>
+                                <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Party B: Recipient</p>
+                             </div>
+                          </div>
+                        </div>
+                      </div>
 
-                    {/* Signature Fields (Abstract) */}
-                    <div className="mt-20 flex justify-between gap-10">
-                       <div className="flex-1 space-y-4">
-                          <div className="h-10 bg-primary/5 border border-dashed border-primary/20 rounded flex items-center justify-center text-[10px] font-bold text-primary/40 uppercase tracking-widest">Awaiting Signature</div>
-                          <div className="h-px bg-slate-100 dark:bg-slate-800 w-full"></div>
-                          <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Party A: Aarav Sharma</p>
-                       </div>
-                       <div className="flex-1 space-y-4">
-                          <div className="h-10 bg-muted border border-dashed border-border rounded flex items-center justify-center text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">Party B: Bikash Tamang</div>
-                          <div className="h-px bg-slate-100 dark:bg-slate-800 w-full"></div>
-                          <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Party B: Recipient</p>
-                       </div>
+                      {/* Overlays */}
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100 backdrop-blur-[1px]">
+                         <div className="bg-white dark:bg-card p-4 rounded-2xl shadow-2xl scale-90 group-hover:scale-100 transition-transform flex flex-col items-center gap-4 border border-border">
+                            <div className="size-12 bg-primary/10 rounded-full flex items-center justify-center">
+                               <ExternalLink className="size-6 text-primary" />
+                            </div>
+                            <div className="text-center">
+                               <p className="font-bold font-['Fraunces'] text-foreground">Interactive Viewer</p>
+                               <p className="text-[10px] text-muted-foreground">Open in full editor mode to place fields</p>
+                            </div>
+                            <button className="bg-primary text-white px-6 py-2 rounded-lg font-bold text-xs shadow-lg shadow-primary/20 transition-all hover:scale-105">
+                               Open Editor
+                            </button>
+                         </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                 </div>
 
-                {/* Overlays */}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100 backdrop-blur-[1px]">
-                   <div className="bg-white dark:bg-card p-4 rounded-2xl shadow-2xl scale-90 group-hover:scale-100 transition-transform flex flex-col items-center gap-4 border border-border">
-                      <div className="size-12 bg-primary/10 rounded-full flex items-center justify-center">
-                         <ExternalLink className="size-6 text-primary" />
-                      </div>
-                      <div className="text-center">
-                         <p className="font-bold font-['Fraunces'] text-foreground">Interactive Viewer</p>
-                         <p className="text-[10px] text-muted-foreground">Open in full editor mode to place fields</p>
-                      </div>
-                      <button className="bg-primary text-white px-6 py-2 rounded-lg font-bold text-xs shadow-lg shadow-primary/20 transition-all hover:scale-105">
-                         Open Editor
-                      </button>
-                   </div>
-                </div>
+                 {/* Right Column: Status */}
+                 <div className="space-y-6">
+                    <SignerStatus recipients={recipients} />
+                 </div>
               </div>
            </div>
         </div>

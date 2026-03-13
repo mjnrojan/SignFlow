@@ -6,17 +6,25 @@ import { PageSkeleton } from './components/shared/PageSkeleton';
 import { useUIStore } from './lib/stores/useUIStore';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
 import { AuthLayout } from './components/layout/AuthLayout';
-import { useTranslation } from 'react-i18next';
+import { ErrorBoundary } from './components/error-boundary';
 
 // Lazy-loaded route pages
 const Dashboard = React.lazy(() => import('./app/dashboard/index'));
+const Analytics = React.lazy(() => import('./app/analytics/index'));
 const DocumentsList = React.lazy(() => import('./app/documents/index'));
+const Templates = React.lazy(() => import('./app/templates/index'));
+const Vault = React.lazy(() => import('./app/vault/index'));
+const Contacts = React.lazy(() => import('./app/contacts/index'));
+const Settings = React.lazy(() => import('./app/settings/index'));
 const DocumentUpload = React.lazy(() => import('./app/documents/upload/index'));
 const DocumentView = React.lazy(() => import('./app/documents/view/index'));
+const DocumentSend = React.lazy(() => import('./app/documents/send/index'));
 const DocumentEditor = React.lazy(() => import('./app/document-editor/index'));
+const SigningPage = React.lazy(() => import('./app/sign/[token]/index'));
 const Landing = React.lazy(() => import('./app/landing/index'));
 const Login = React.lazy(() => import('./app/auth/login/index'));
 const Signup = React.lazy(() => import('./app/auth/signup/index'));
+const NotFound = React.lazy(() => import('./app/not-found/index'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -41,10 +49,16 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-function App() {
-  const { t } = useTranslation();
-
+function AppRouter() {
   const router = createBrowserRouter([
+    {
+      path: '/sign/:token',
+      element: (
+        <Suspense fallback={<PageSkeleton />}>
+          <SigningPage />
+        </Suspense>
+      ),
+    },
     {
       path: '/',
       element: (
@@ -89,6 +103,30 @@ function App() {
               ),
             },
             {
+              path: '/analytics',
+              element: (
+                <Suspense fallback={<PageSkeleton />}>
+                  <Analytics />
+                </Suspense>
+              ),
+            },
+            {
+              path: '/contacts',
+              element: (
+                <Suspense fallback={<PageSkeleton />}>
+                  <Contacts />
+                </Suspense>
+              ),
+            },
+            {
+              path: '/settings',
+              element: (
+                <Suspense fallback={<PageSkeleton />}>
+                  <Settings />
+                </Suspense>
+              ),
+            },
+            {
               path: '/documents',
               element: (
                 <Suspense fallback={<PageSkeleton />}>
@@ -97,10 +135,34 @@ function App() {
               ),
             },
             {
+              path: '/templates',
+              element: (
+                <Suspense fallback={<PageSkeleton />}>
+                  <Templates />
+                </Suspense>
+              ),
+            },
+            {
+              path: '/vault',
+              element: (
+                <Suspense fallback={<PageSkeleton />}>
+                  <Vault />
+                </Suspense>
+              ),
+            },
+            {
               path: '/documents/upload',
               element: (
                 <Suspense fallback={<PageSkeleton />}>
                   <DocumentUpload />
+                </Suspense>
+              ),
+            },
+            {
+              path: '/documents/:id/send',
+              element: (
+                <Suspense fallback={<PageSkeleton />}>
+                  <DocumentSend />
                 </Suspense>
               ),
             },
@@ -120,78 +182,35 @@ function App() {
                 </Suspense>
               ),
             },
-            {
-              path: '/templates',
-              element: (
-                <Suspense fallback={<PageSkeleton />}>
-                  <div className="p-8">
-                    <h1 className="text-2xl font-bold font-['Fraunces'] text-foreground">{t('sidebar.templates')}</h1>
-                    <p className="text-muted-foreground mt-1 font-['Syne']">{t('common.comingSoon')}</p>
-                  </div>
-                </Suspense>
-              ),
-            },
-            {
-              path: '/analytics',
-              element: (
-                <Suspense fallback={<PageSkeleton />}>
-                  <div className="p-8">
-                    <h1 className="text-2xl font-bold font-['Fraunces'] text-foreground">{t('sidebar.analytics')}</h1>
-                    <p className="text-muted-foreground mt-1 font-['Syne']">{t('common.comingSoon')}</p>
-                  </div>
-                </Suspense>
-              ),
-            },
-            {
-              path: '/vault',
-              element: (
-                <Suspense fallback={<PageSkeleton />}>
-                  <div className="p-8">
-                    <h1 className="text-2xl font-bold font-['Fraunces'] text-foreground">{t('sidebar.signatures')}</h1>
-                    <p className="text-muted-foreground mt-1 font-['Syne']">{t('common.comingSoon')}</p>
-                  </div>
-                </Suspense>
-              ),
-            },
-            {
-              path: '/contacts',
-              element: (
-                <Suspense fallback={<PageSkeleton />}>
-                  <div className="p-8">
-                    <h1 className="text-2xl font-bold font-['Fraunces'] text-foreground">{t('sidebar.contacts')}</h1>
-                    <p className="text-muted-foreground mt-1 font-['Syne']">{t('common.comingSoon')}</p>
-                  </div>
-                </Suspense>
-              ),
-            },
-            {
-              path: '/settings',
-              element: (
-                <Suspense fallback={<PageSkeleton />}>
-                  <div className="p-8">
-                    <h1 className="text-2xl font-bold font-['Fraunces'] text-foreground">{t('sidebar.settings')}</h1>
-                    <p className="text-muted-foreground mt-1 font-['Syne']">{t('common.comingSoon')}</p>
-                  </div>
-                </Suspense>
-              ),
-            },
           ],
         },
       ],
     },
     {
+      path: '/404',
+      element: (
+        <Suspense fallback={<PageSkeleton />}>
+          <NotFound />
+        </Suspense>
+      ),
+    },
+    {
       path: '*',
-      element: <Navigate to="/dashboard" replace />,
+      element: <Navigate to="/404" replace />,
     },
   ]);
 
-  return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </QueryClientProvider>
-  );
+  return <RouterProvider router={router} />;
 }
 
-export default App;
+export default function App() {
+  return (
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          <AppRouter />
+        </ThemeProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  );
+}

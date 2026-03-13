@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   DndContext, 
@@ -11,7 +11,6 @@ import {
   defaultDropAnimationSideEffects
 } from '@dnd-kit/core';
 import { 
-  Loader2, 
   FileEdit,
   PenTool,
   Hash,
@@ -26,16 +25,24 @@ import { PropertiesPanel } from '@/components/document-editor/PropertiesPanel';
 import { useDocumentStore } from '@/lib/stores/useDocumentStore';
 import { FieldType } from '@/types/document.types';
 import { useTranslation } from 'react-i18next';
+import { EditorSkeleton } from '@/components/shared/EditorSkeleton';
 
 export default function DocumentEditorPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { activeDocument, setActiveDocument, addField, removeField } = useDocumentStore();
+  const { activeDocument, setActiveDocument, addField, removeField, updateField } = useDocumentStore();
   
   const [activeFieldId, setActiveFieldId] = useState<string | null>(null);
   const [activeDragType, setActiveDragType] = useState<FieldType | null>(null);
-  const [selectedRecipientId, setSelectedRecipientId] = useState<string | null>('rec_1'); // Default to first mock recipient
+  const [selectedRecipientId, setSelectedRecipientId] = useState<string | null>('rec_1');
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Simulated loading delay
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Initialize sensors for dnd-kit
   const sensors = useSensors(
@@ -69,18 +76,31 @@ export default function DocumentEditorPage() {
       const type = active.data.current?.type as FieldType;
       const pageNumber = over.data.current?.pageNumber as number;
       
-      // Calculate relative coordinates
-      const x = active.rect.current.translated 
-        ? active.rect.current.translated.left - over.rect.left 
+      // Get the page dimensions from the over element's rect
+      const pageRect = over.rect;
+      
+      // Calculate relative coordinates in pixels
+      const pixelX = active.rect.current.translated 
+        ? active.rect.current.translated.left - pageRect.left 
         : 0;
-      const y = active.rect.current.translated 
-        ? active.rect.current.translated.top - over.rect.top 
+      const pixelY = active.rect.current.translated 
+        ? active.rect.current.translated.top - pageRect.top 
         : 0;
+      
+      // Convert to percentages (0-1) for persistence
+      const x = Math.max(0, Math.min(1, pixelX / pageRect.width));
+      const y = Math.max(0, Math.min(1, pixelY / pageRect.height));
       
       const newField = {
         id: `field-${Date.now()}`,
         type: type || FieldType.SIGNATURE,
-        position: { x, y, pageNumber },
+        position: { 
+          x, 
+          y, 
+          width: 0.15, // 15% width by default
+          height: 0.08, // 8% height by default
+          pageNumber 
+        },
         required: true,
         recipientId: selectedRecipientId || undefined
       };
@@ -92,13 +112,8 @@ export default function DocumentEditorPage() {
 
   const currentField = activeDocument?.fields.find(f => f.id === activeFieldId) || null;
 
-  if (!activeDocument) {
-    return (
-      <div className="h-screen flex flex-col items-center justify-center space-y-4 bg-background">
-        <Loader2 className="size-10 animate-spin text-primary" />
-        <p className="text-xl font-bold font-['Fraunces'] text-foreground">{t('editor.initializing')}</p>
-      </div>
-    );
+  if (isLoading || !activeDocument) {
+    return <EditorSkeleton />;
   }
 
   return (
@@ -110,7 +125,7 @@ export default function DocumentEditorPage() {
       <EditorLayout 
         documentTitle={activeDocument.title}
         onSave={() => alert(t('editor.savedSuccess'))}
-        onSend={() => navigate(`/documents/${activeDocument.id}`)}
+        onSend={() => navigate(`/documents/${activeDocument.id}/send`)}
       >
         {/* Left Sidebar: Fields */}
         <FieldToolbar 
@@ -126,13 +141,15 @@ export default function DocumentEditorPage() {
             activeFieldId={activeFieldId}
             onSelectField={setActiveFieldId}
             onRemoveField={removeField}
+            onUpdateField={updateField}
           />
         </div>
 
         {/* Right Sidebar: Properties */}
         <PropertiesPanel 
           activeField={currentField}
-          recipientId={selectedRecipientId}
+          recipientId={currentField?.recipientId || selectedRecipientId}
+          onUpdate={updateField}
           onRemove={removeField}
         />
       </EditorLayout>
