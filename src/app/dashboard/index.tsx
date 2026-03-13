@@ -20,6 +20,7 @@ import { useAuditLogs } from '@/lib/hooks/useAuditLogs';
 import { DocumentStatus } from '@/types/document.types';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { TableSkeleton } from '@/components/shared/TableSkeleton';
+import { useTranslation } from 'react-i18next';
 
 interface StatCardProps {
   title: string;
@@ -32,11 +33,11 @@ interface StatCardProps {
 
 function StatCard({ title, value, icon: Icon, description, trend, variant = 'default' }: StatCardProps) {
   const variantStyles = {
-    default: 'text-slate-500 bg-slate-100 dark:bg-muted',
+    default: 'text-muted-foreground bg-muted',
     primary: 'text-primary bg-primary/10',
     secondary: 'text-secondary bg-secondary/10',
     warning: 'text-amber-600 bg-amber-100',
-    danger: 'text-red-600 bg-red-100',
+    danger: 'text-destructive bg-destructive/10',
     info: 'text-blue-600 bg-blue-100',
   };
 
@@ -86,6 +87,7 @@ function QuickAction({ title, subtitle, icon: Icon, color, onClick }: { title: s
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { data: documents, isLoading: docsLoading } = useDocuments();
   const { data: auditLogs, isLoading: logsLoading } = useAuditLogs();
 
@@ -122,11 +124,13 @@ export default function Dashboard() {
       {/* Page Header Area */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold font-['Fraunces'] text-foreground">Dashboard</h1>
-          <p className="text-muted-foreground mt-1 font-['Syne'] tracking-wide">Namaste! Manage your digital workflows securely.</p>
+          <h1 className="text-3xl font-bold font-['Fraunces'] text-foreground">{t('dashboard.title')}</h1>
+          <p className="text-muted-foreground mt-1 font-['Syne'] tracking-wide">
+            {t('dashboard.greeting')} {t('dashboard.subtitle')}
+          </p>
         </div>
         <div className="flex items-center gap-2">
-           <div className="hidden sm:flex items-center bg-accent/50 rounded-lg p-1 border border-border">
+           <div className="hidden sm:flex items-center bg-accent rounded-lg p-1 border border-border">
               <span className="px-3 py-1.5 text-xs font-bold text-primary bg-background rounded-md shadow-sm">Monthly</span>
               <span className="px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground cursor-pointer">Yearly</span>
            </div>
@@ -136,15 +140,15 @@ export default function Dashboard() {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <QuickAction 
-          title="New Document" 
-          subtitle="Upload PDF or Word to start signing" 
+          title={t('dashboard.quickActions.newDocTitle')} 
+          subtitle={t('dashboard.quickActions.newDocSub')} 
           icon={FileEdit} 
           color="bg-primary" 
           onClick={() => navigate('/documents/upload')}
         />
         <QuickAction 
-          title="Use Template" 
-          subtitle="Choose from ready-made Nepal standards" 
+          title={t('dashboard.quickActions.useTemplateTitle')} 
+          subtitle={t('dashboard.quickActions.useTemplateSub')} 
           icon={Layers} 
           color="bg-secondary" 
           onClick={() => navigate('/templates')}
@@ -153,11 +157,11 @@ export default function Dashboard() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        <StatCard title="All Files" value={stats.total} icon={FileText} description="Across all folders" variant="default" />
-        <StatCard title="Drafts" value={stats.draft} icon={Edit} description="Work in progress" variant="info" />
-        <StatCard title="Sent Out" value={stats.sent} icon={Send} trend="+12.5%" variant="primary" />
-        <StatCard title="Completed" value={stats.completed} icon={CheckCircle} trend="+18.2%" variant="secondary" />
-        <StatCard title="Declined" value={stats.declined} icon={AlertCircle} description="Needs attention" variant="danger" />
+        <StatCard title={t('dashboard.stats.allFiles')} value={stats.total} icon={FileText} description="Across all folders" variant="default" />
+        <StatCard title={t('dashboard.stats.drafts')} value={stats.draft} icon={Edit} description="Work in progress" variant="info" />
+        <StatCard title={t('dashboard.stats.sentOut')} value={stats.sent} icon={Send} trend="+12.5%" variant="primary" />
+        <StatCard title={t('dashboard.stats.completed')} value={stats.completed} icon={CheckCircle} trend="+18.2%" variant="secondary" />
+        <StatCard title={t('dashboard.stats.declined')} value={stats.declined} icon={AlertCircle} description="Needs attention" variant="danger" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -166,23 +170,23 @@ export default function Dashboard() {
           <div className="p-6 border-b border-border flex items-center justify-between">
             <div className="flex items-center gap-2">
               <History className="w-5 h-5 text-primary" />
-              <h2 className="font-bold text-lg font-['Fraunces']">Active Documents</h2>
+              <h2 className="font-bold text-lg font-['Fraunces']">{t('dashboard.recentDocs')}</h2>
             </div>
             <button 
               onClick={() => navigate('/documents')}
               className="text-xs text-primary font-bold hover:underline flex items-center gap-1"
             >
-              View All <ArrowRight className="w-3 h-3" />
+              {t('dashboard.viewAll')} <ArrowRight className="w-3 h-3" />
             </button>
           </div>
           <div className="overflow-x-auto flex-1">
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-muted/30 text-muted-foreground text-[10px] uppercase tracking-widest font-bold">
-                  <th className="px-6 py-4">Document Details</th>
-                  <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4">Created</th>
-                  <th className="px-6 py-4 text-right">Action</th>
+                  <th className="px-6 py-4">{t('documents.table.document')}</th>
+                  <th className="px-6 py-4">{t('documents.table.status')}</th>
+                  <th className="px-6 py-4">{t('documents.table.created')}</th>
+                  <th className="px-6 py-4 text-right">{t('common.actions')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
@@ -211,13 +215,13 @@ export default function Dashboard() {
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button 
-                          title="View" 
+                          title={t('common.view')} 
                           onClick={() => navigate(`/documents/${doc.id}`)}
                           className="p-1.5 hover:bg-primary/10 rounded-md text-primary transition-colors"
                         >
                           <Eye className="w-4 h-4" />
                         </button>
-                        <button title="Download" className="p-1.5 hover:bg-primary/10 rounded-md text-primary transition-colors">
+                        <button title={t('common.download')} className="p-1.5 hover:bg-primary/10 rounded-md text-primary transition-colors">
                           <Download className="w-4 h-4" />
                         </button>
                       </div>
@@ -234,11 +238,11 @@ export default function Dashboard() {
           <div className="p-6 border-b border-border flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Share2 className="w-5 h-5 text-primary" />
-              <h2 className="font-bold text-lg font-['Fraunces']">Activity Feed</h2>
+              <h2 className="font-bold text-lg font-['Fraunces']">{t('dashboard.activityFeed')}</h2>
             </div>
             <span className="text-[10px] font-bold text-muted-foreground bg-muted px-2 py-0.5 rounded-full uppercase">Real-time</span>
           </div>
-          <div className="p-6 space-y-6 overflow-y-auto max-h-[500px]">
+          <div className="p-6 space-y-6 overflow-y-auto max-h-[500px] custom-scrollbar">
             {recentLogs.map((log) => (
               <div key={log.id} className="flex gap-4 relative group">
                 <div className="relative z-10 size-9 rounded-full bg-accent border border-border flex items-center justify-center shrink-0 shadow-sm group-hover:border-primary/50 transition-colors">
@@ -261,7 +265,7 @@ export default function Dashboard() {
               </div>
             ))}
             <button className="w-full py-3 mt-4 text-xs font-bold text-muted-foreground bg-accent/30 hover:bg-accent hover:text-foreground rounded-xl transition-all border border-dashed border-border tracking-widest uppercase">
-              Load More History
+              {t('dashboard.loadMore')}
             </button>
           </div>
         </div>

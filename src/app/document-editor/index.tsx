@@ -25,10 +25,12 @@ import { CanvasContainer } from '@/components/document-editor/CanvasContainer';
 import { PropertiesPanel } from '@/components/document-editor/PropertiesPanel';
 import { useDocumentStore } from '@/lib/stores/useDocumentStore';
 import { FieldType } from '@/types/document.types';
+import { useTranslation } from 'react-i18next';
 
 export default function DocumentEditorPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { activeDocument, setActiveDocument, addField, removeField } = useDocumentStore();
   
   const [activeFieldId, setActiveFieldId] = useState<string | null>(null);
@@ -68,7 +70,6 @@ export default function DocumentEditorPage() {
       const pageNumber = over.data.current?.pageNumber as number;
       
       // Calculate relative coordinates
-      // translated is the rect after transform
       const x = active.rect.current.translated 
         ? active.rect.current.translated.left - over.rect.left 
         : 0;
@@ -89,19 +90,13 @@ export default function DocumentEditorPage() {
     }
   };
 
-  const handleUpdateField = (fieldId: string, updates: any) => {
-     // In a real app we'd have a store action for this, for now let's assume it updates local state or we'd add it to store
-     // Mock update for demo:
-     console.log('Update field:', fieldId, updates);
-  };
-
   const currentField = activeDocument?.fields.find(f => f.id === activeFieldId) || null;
 
   if (!activeDocument) {
     return (
-      <div className="h-screen flex flex-col items-center justify-center space-y-4">
+      <div className="h-screen flex flex-col items-center justify-center space-y-4 bg-background">
         <Loader2 className="size-10 animate-spin text-primary" />
-        <p className="text-xl font-bold font-['Fraunces']">Initializing Editor...</p>
+        <p className="text-xl font-bold font-['Fraunces'] text-foreground">{t('editor.initializing')}</p>
       </div>
     );
   }
@@ -114,7 +109,7 @@ export default function DocumentEditorPage() {
     >
       <EditorLayout 
         documentTitle={activeDocument.title}
-        onSave={() => alert('Draft Saved Successfully!')}
+        onSave={() => alert(t('editor.savedSuccess'))}
         onSend={() => navigate(`/documents/${activeDocument.id}`)}
       >
         {/* Left Sidebar: Fields */}
@@ -124,7 +119,7 @@ export default function DocumentEditorPage() {
         />
 
         {/* Center: Canvas */}
-        <div className="flex-1 overflow-hidden relative">
+        <div className="flex-1 overflow-hidden relative bg-muted/20">
           <CanvasContainer 
             fileUrl={activeDocument.fileUrl}
             fields={activeDocument.fields}
@@ -137,7 +132,7 @@ export default function DocumentEditorPage() {
         {/* Right Sidebar: Properties */}
         <PropertiesPanel 
           activeField={currentField}
-          onUpdate={handleUpdateField}
+          recipientId={selectedRecipientId}
           onRemove={removeField}
         />
       </EditorLayout>
@@ -153,9 +148,9 @@ export default function DocumentEditorPage() {
           }),
         }}>
         {activeDragType ? (
-          <div className="px-6 py-3 bg-primary text-white font-bold rounded-xl shadow-2xl flex items-center gap-3 opacity-90 scale-105 rotate-[-4deg]">
+          <div className="px-6 py-3 bg-primary text-primary-foreground font-bold rounded-xl shadow-2xl flex items-center gap-3 opacity-90 scale-105 rotate-[-4deg]">
              {getIconForType(activeDragType)}
-             <span className="text-xs uppercase tracking-widest">{activeDragType}</span>
+             <span className="text-xs uppercase tracking-widest">{t(`editor.fields.${activeDragType.toLowerCase()}`)}</span>
           </div>
         ) : null}
       </DragOverlay>

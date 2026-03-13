@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 export function TopNavbar() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const theme = useUIStore((s) => s.theme);
   const language = useUIStore((s) => s.language);
   const toggleTheme = useUIStore((s) => s.toggleTheme);
@@ -13,8 +13,8 @@ export function TopNavbar() {
   const user = useUserStore((s) => s.user);
 
   const handleLanguageToggle = () => {
-    toggleLanguage();
     const newLang = language === 'en' ? 'np' : 'en';
+    toggleLanguage();
     i18n.changeLanguage(newLang);
   };
 
@@ -28,14 +28,14 @@ export function TopNavbar() {
     : 'AU';
 
   return (
-    <header className="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 lg:px-8 flex items-center justify-between z-10 shrink-0">
+    <header className="h-16 bg-card border-b border-border px-6 lg:px-8 flex items-center justify-between z-10 shrink-0">
       {/* Search */}
       <div className="flex-1 max-w-md">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+        <div className="relative group">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
           <input
-            className="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/50 focus:outline-none text-slate-900 dark:text-slate-100 placeholder:text-slate-500"
-            placeholder="Search for documents, signatures..."
+            className="w-full bg-muted border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/50 focus:outline-none text-foreground placeholder:text-muted-foreground transition-all"
+            placeholder={t('navbar.searchPlaceholder')}
             type="text"
           />
         </div>
@@ -45,44 +45,44 @@ export function TopNavbar() {
       <div className="flex items-center gap-2">
         {/* Notifications */}
         <button
-          className="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg relative transition-colors"
-          title="Notifications"
+          className="p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-lg relative transition-colors"
+          title={t('navbar.notifications')}
         >
           <Bell className="size-5" />
-          <span className="absolute top-2 right-2.5 size-2 bg-primary rounded-full border-2 border-white dark:border-slate-900" />
+          <span className="absolute top-2 right-2.5 size-2 bg-primary rounded-full border-2 border-background" />
         </button>
 
         {/* Language toggle */}
         <button
           onClick={handleLanguageToggle}
-          className="flex items-center gap-1 p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
-          title={`Switch to ${language === 'en' ? 'Nepali' : 'English'}`}
+          className="flex items-center gap-1 p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-lg transition-colors"
+          title={language === 'en' ? t('navbar.languageNp') : t('navbar.languageEn')}
         >
           <Languages className="size-5" />
           <span className="text-xs font-bold px-0.5 min-w-[20px] text-center">
-            {language === 'en' ? 'EN' : 'NP'}
+            {language?.toUpperCase()}
           </span>
         </button>
 
         {/* Theme toggle */}
         <button
           onClick={toggleTheme}
-          className="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
-          title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+          className="p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-lg transition-colors"
+          title={theme === 'light' ? t('navbar.themeDark') : t('navbar.themeLight')}
         >
           {theme === 'light' ? <Moon className="size-5" /> : <Sun className="size-5" />}
         </button>
 
         {/* Divider */}
-        <div className="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-2" />
+        <div className="h-8 w-px bg-border mx-2" />
 
         {/* User profile */}
         <div className="flex items-center gap-3 pl-1">
           <div className="text-right hidden sm:block">
-            <p className="text-sm font-bold leading-none text-slate-900 dark:text-white">
+            <p className="text-sm font-bold leading-none text-foreground">
               {user?.name ?? 'Admin User'}
             </p>
-            <p className="text-[11px] text-slate-500 mt-1 uppercase tracking-tight">
+            <p className="text-[11px] text-muted-foreground mt-1 uppercase tracking-tight">
               {user?.email ?? 'admin@signflow.np'}
             </p>
           </div>

@@ -1,6 +1,169 @@
 {
   "common": {
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "download": "Download",
+    "share": "Share",
+    "search": "Search...",
+    "loading": "Loading...",
+    "comingSoon": "Coming soon",
+    "actions": "Actions",
+    "status": "Status",
+    "created": "Created",
+    "email": "Email Address",
+    "password": "Password",
+    "getStarted": "Get Started",
+    "login": "Log In",
+    "signup": "Sign Up",
+    "join": "Join"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "documents": "Documents",
+    "templates": "Templates",
+    "signatures": "Signatures",
+    "contacts": "Contacts",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "administration": "Administration",
+    "collapse": "Collapse",
+    "expand": "Expand",
+    "newDocument": "New Document"
+  },
+  "navbar": {
+    "searchPlaceholder": "Search for documents, signatures...",
+    "notifications": "Notifications",
+    "themeLight": "Switch to light mode",
+    "themeDark": "Switch to dark mode",
+    "languageEn": "English",
+    "languageNp": "Nepali"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Secure Sign-In",
+      "forgot": "Forgot?",
+      "remember": "Remember me",
+      "signIn": "Sign In",
+      "secureAccess": "Secure Access",
+      "googleSignIn": "Sign in with Google",
+      "noAccount": "New here?",
+      "join": "Join SignFlow"
+    },
+    "signup": {
+      "title": "Create Account",
+      "subtitle": "Join the digital revolution in Nepal",
+      "fullName": "Full Name",
+      "agree": "I agree to the {{terms}} and {{privacy}}",
+      "terms": "Terms",
+      "privacy": "Privacy",
+      "create": "Create Account",
+      "haveAccount": "Already have an account?",
+      "loginInstead": "Sign in instead"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "greeting": "Namaste!",
+    "subtitle": "Manage your digital workflows securely.",
+    "quickActions": {
+      "newDocTitle": "New Document",
+      "newDocSub": "Upload PDF or Word to start signing",
+      "useTemplateTitle": "Use Template",
+      "useTemplateSub": "Choose from ready-made Nepal standards"
+    },
+    "stats": {
+      "allFiles": "All Files",
+      "drafts": "Drafts",
+      "sentOut": "Sent Out",
+      "completed": "Completed",
+      "declined": "Declined"
+    },
+    "recentDocs": "Active Documents",
+    "activityFeed": "Activity Feed",
+    "viewAll": "View All",
+    "loadMore": "Load More History"
+  },
+  "documents": {
+    "title": "Documents",
+    "subtitle": "You have {{count}} documents in your account.",
+    "newDoc": "New Document",
+    "searchPlaceholder": "Search by title or ID...",
+    "filterAll": "All Status",
+    "table": {
+      "document": "Document",
+      "recipients": "Recipients",
+      "status": "Status",
+      "created": "Created",
+      "actions": "Actions"
+    },
+    "empty": {
+      "title": "No documents found",
+      "description": "Try adjusting your search terms or filter to find what you're looking for.",
+      "clear": "Clear all filters"
+    },
+    "menu": {
+      "title": "Document Options",
+      "viewDetails": "View Details",
+      "editFields": "Edit Fields",
+      "shareSend": "Share / Send",
+      "downloadPdf": "Download PDF",
+      "deleteDoc": "Delete Document"
+    }
+  },
+  "editor": {
+    "initializing": "Initializing Editor...",
+    "savedSuccess": "Draft Saved Successfully!",
+    "tabs": {
+      "fields": "Fields",
+      "people": "People"
+    },
+    "fields": {
+      "dragDrop": "Drag & Drop",
+      "signature": "Signature",
+      "initials": "Initial Field",
+      "date": "Date Signed",
+      "text": "Text Input",
+      "seal": "Company Seal"
+    },
+    "searchPlaceholder": "Search fields",
+    "dynamicMetadata": "Dynamic Metadata",
+    "enterpriseBlocked": "Enterprise Fields Blocked",
+    "dndInfo": "Drag fields onto the canvas to place them permanently in the document.",
+    "properties": {
+      "title": "Field Properties",
+      "noSelection": "Select a field on the canvas to edit its properties.",
+      "general": "General Information",
+      "recipient": "Assigned Recipient",
+      "required": "Required Field",
+      "position": "Position"
+    },
+    "recipients": {
+      "title": "Recipients",
+      "add": "Add Recipient",
+      "manage": "Manage Signing Order",
+      "role": {
+        "signer": "Signer",
+        "viewer": "Viewer",
+        "approver": "Approver"
+      }
+    }
+  },
+  "landing": {
+    "nav": {
+      "features": "Features",
+      "workflow": "Workflow",
+      "testimonials": "Testimonials"
+    },
+    "hero": {
+      "title": "The Future of Signing in Nepal.",
+      "subtitle": "Legally binding digital signatures designed for the Nepali market. From secure land documents to corporate contracts—all in one click.",
+      "cta": "Sign your first document",
+      "demo": "Watch Demo Video",
+      "trusted": "Trusted by 500+ Local Businesses"
+    }
   }
 }

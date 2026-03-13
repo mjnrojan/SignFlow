@@ -15,6 +15,7 @@ import { useState } from 'react';
 import { FieldType } from '@/types/document.types';
 import { useDraggable } from '@dnd-kit/core';
 import { RecipientList } from './RecipientList';
+import { useTranslation } from 'react-i18next';
 
 interface DraggableFieldItemProps {
   type: FieldType;
@@ -42,14 +43,14 @@ function DraggableFieldItem({ type, label, icon }: DraggableFieldItemProps) {
       {...attributes}
       className={`
         w-full flex items-center gap-3 p-3 text-sm font-semibold rounded-xl transition-all border shrink-0 
-        ${isDragging ? 'bg-primary/5 border-primary shadow-lg ring-2 ring-primary/20 rotate-[-4deg]' : 'bg-card border-border hover:border-primary/50 hover:bg-muted/30 active:scale-95 group'}
+        ${isDragging ? 'bg-primary/5 border-primary shadow-lg ring-2 ring-primary/20 rotate-[-4deg]' : 'bg-card border-border hover:border-primary/50 hover:bg-accent/40 active:scale-95 group'}
       `}
     >
-      <div className={`p-2 rounded-lg transition-colors ${isDragging ? 'bg-primary text-white' : 'bg-muted text-muted-foreground group-hover:bg-primary group-hover:text-white'}`}>
+      <div className={`p-2 rounded-lg transition-colors ${isDragging ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground'}`}>
         {icon}
       </div>
       <div className="flex-1 text-left">
-         <span className={`block leading-none ${isDragging ? 'text-primary' : 'text-foreground'}`}>{label}</span>
+         <span className={`block leading-none ${isDragging ? 'text-primary font-bold' : 'text-foreground'}`}>{label}</span>
       </div>
       <ChevronRight className={`size-4 text-muted-foreground transition-transform group-hover:translate-x-1 ${isDragging ? 'hidden' : ''}`} />
     </button>
@@ -62,14 +63,15 @@ interface FieldToolbarProps {
 }
 
 export function FieldToolbar({ selectedRecipientId, onSelectRecipient }: FieldToolbarProps) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'fields' | 'recipients'>('fields');
   
   const fields = [
-    { type: FieldType.SIGNATURE, label: 'Signature', icon: <PenTool className="size-4" /> },
-    { type: FieldType.INITIALS, label: 'Initial Field', icon: <Hash className="size-4" /> },
-    { type: FieldType.DATE, label: 'Date Signed', icon: <Calendar className="size-4" /> },
-    { type: FieldType.TEXT, label: 'Text Input', icon: <Type className="size-4" /> },
-    { type: FieldType.SEAL, label: 'Company Seal', icon: <ShieldCheck className="size-4" /> },
+    { type: FieldType.SIGNATURE, translationKey: 'editor.fields.signature', icon: <PenTool className="size-4" /> },
+    { type: FieldType.INITIALS, translationKey: 'editor.fields.initials', icon: <Hash className="size-4" /> },
+    { type: FieldType.DATE, translationKey: 'editor.fields.date', icon: <Calendar className="size-4" /> },
+    { type: FieldType.TEXT, translationKey: 'editor.fields.text', icon: <Type className="size-4" /> },
+    { type: FieldType.SEAL, translationKey: 'editor.fields.seal', icon: <ShieldCheck className="size-4" /> },
   ];
 
   return (
@@ -82,7 +84,7 @@ export function FieldToolbar({ selectedRecipientId, onSelectRecipient }: FieldTo
             ${activeTab === 'fields' ? 'text-primary bg-background border-r border-border' : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'}`}
         >
           <Layers className="size-4 md:mb-1" />
-          <span>Fields</span>
+          <span>{t('editor.tabs.fields')}</span>
         </button>
         <button 
           onClick={() => setActiveTab('recipients')}
@@ -90,7 +92,7 @@ export function FieldToolbar({ selectedRecipientId, onSelectRecipient }: FieldTo
             ${activeTab === 'recipients' ? 'text-primary bg-background border-l border-border' : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'}`}
         >
           <Users className="size-4 md:mb-1" />
-          <span>People</span>
+          <span>{t('editor.tabs.people')}</span>
         </button>
       </div>
 
@@ -101,17 +103,17 @@ export function FieldToolbar({ selectedRecipientId, onSelectRecipient }: FieldTo
             <div className="flex items-center gap-2 mb-2">
                <Layers className="size-4 text-primary" />
                <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest font-['Syne']">
-                  Drag & Drop
+                  {t('editor.fields.dragDrop')}
                </h3>
             </div>
             
             <div className="relative group grayscale focus-within:grayscale-0 transition-all opacity-50 focus-within:opacity-100">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
               <input 
                 type="text" 
-                placeholder="Search fields"
+                placeholder={t('editor.searchPlaceholder')}
                 disabled
-                className="w-full bg-muted border border-border rounded-xl pl-9 pr-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-primary/20"
+                className="w-full bg-muted border border-border rounded-xl pl-9 pr-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground"
               />
             </div>
           </div>
@@ -122,7 +124,7 @@ export function FieldToolbar({ selectedRecipientId, onSelectRecipient }: FieldTo
               <DraggableFieldItem 
                 key={field.type}
                 type={field.type}
-                label={field.label}
+                label={t(field.translationKey)}
                 icon={field.icon}
               />
             ))}
@@ -132,7 +134,7 @@ export function FieldToolbar({ selectedRecipientId, onSelectRecipient }: FieldTo
                <div className="flex items-center gap-2 mb-4">
                   <User className="size-4 text-muted-foreground shrink-0" />
                   <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest font-['Syne']">
-                     Dynamic Metadata
+                     {t('editor.dynamicMetadata')}
                   </h3>
                </div>
                
@@ -141,7 +143,9 @@ export function FieldToolbar({ selectedRecipientId, onSelectRecipient }: FieldTo
                   <div className="size-8 bg-muted rounded-full flex items-center justify-center">
                      <Plus className="size-3 text-muted-foreground" />
                   </div>
-                  <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-tighter">Enterprise Fields Blocked</p>
+                  <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-tighter">
+                    {t('editor.enterpriseBlocked')}
+                  </p>
                </div>
             </div>
           </div>
@@ -149,9 +153,9 @@ export function FieldToolbar({ selectedRecipientId, onSelectRecipient }: FieldTo
           {/* Footer Info */}
           <div className="p-6 bg-muted/20 border-t border-border mt-auto">
             <div className="p-3 bg-primary/5 border border-primary/20 rounded-xl relative overflow-hidden">
-               <p className="text-[10px] font-bold text-primary mb-1">DND Feature</p>
+               <p className="text-[10px] font-bold text-primary mb-1 uppercase tracking-tighter">DND Feature</p>
                <p className="text-[10px] text-muted-foreground font-['Syne'] leading-relaxed relative z-10">
-                  Drag fields onto the canvas to place them permanently in the document.
+                  {t('editor.dndInfo')}
                </p>
                <div className="absolute top-0 right-0 size-8 bg-primary/10 rounded-bl-3xl"></div>
             </div>
@@ -166,5 +170,3 @@ export function FieldToolbar({ selectedRecipientId, onSelectRecipient }: FieldTo
     </div>
   );
 }
-
-
