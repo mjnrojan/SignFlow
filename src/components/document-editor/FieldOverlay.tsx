@@ -1,12 +1,13 @@
-import { PenTool, Hash, Calendar, Type, ShieldCheck, Trash2, Settings2 } from 'lucide-react';
+import { PenTool, Hash, Calendar, Type, ShieldCheck, Trash2 } from 'lucide-react';
 import { FieldType, type IDocumentField } from '@/types/document.types';
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { cn } from '@/lib/utils';
 
 interface FieldOverlayProps {
   field: IDocumentField;
   active: boolean;
-  onSelect: (id: string) => void;
+  onSelect: (id: string, force?: boolean) => void;
   onRemove: (id: string) => void;
   onUpdate?: (id: string, updates: any) => void;
   color?: string;
@@ -139,38 +140,63 @@ export function FieldOverlay({
         borderColor: active ? color : undefined 
       }}
     >
-      {/* Icon & Label Container */}
-      <div className="flex items-center gap-2 px-3 w-full h-full overflow-hidden">
-        <div 
-          className={`shrink-0 p-1.5 rounded-lg transition-colors ${active ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}
-          style={{ backgroundColor: active ? color : undefined }}
-        >
-          {getIcon()}
-        </div>
-        
-        <div className="flex flex-col flex-1 min-w-0">
-          <span className={`text-[10px] font-bold uppercase tracking-widest leading-none truncate ${active ? 'text-primary' : 'text-muted-foreground'}`} style={{ color: active ? color : undefined }}>
-            {t(`editor.fields.${field.type.toLowerCase()}`)}
-          </span>
-          <span className="text-[8px] text-muted-foreground truncate opacity-70">
-            {t('editor.properties.required')}
-          </span>
-        </div>
+      {/* Main Content Area */}
+      <div className="relative w-full h-full p-2 flex items-center justify-center overflow-hidden">
+        {field.value ? (
+          <div className="w-full h-full flex items-center justify-center animate-in zoom-in-95 duration-300">
+            <img 
+              src={field.value} 
+              alt={field.type} 
+              className={cn(
+                "max-w-full max-h-full object-contain pointer-events-none",
+                field.type === FieldType.SEAL ? "rounded-full" : ""
+              )}
+            />
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center gap-1 w-full h-full overflow-hidden text-center relative group/inner">
+            <div 
+              className={`shrink-0 p-1.5 rounded-lg transition-colors ${active ? 'bg-primary text-primary-foreground shadow-lg' : 'bg-muted text-muted-foreground'}`}
+              style={{ backgroundColor: active ? color : undefined }}
+            >
+              {getIcon()}
+            </div>
+            
+            <div className="flex flex-col min-w-0">
+              <span className={`text-[9px] font-bold uppercase tracking-widest leading-none truncate ${active ? 'text-primary' : 'text-muted-foreground'}`} style={{ color: active ? color : undefined }}>
+                {t(`editor.fields.${field.type.toLowerCase()}`)}
+              </span>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Action Buttons for Active Field */}
       {active && !isDragging && !isResizing && (
         <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-card border border-border shadow-2xl rounded-lg py-1 px-1.5 flex items-center gap-1 animate-in zoom-in-90 fade-in duration-200 z-50">
-          <button 
-            onMouseDown={(e) => e.stopPropagation()}
-            className="p-1.5 hover:bg-muted rounded text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <Settings2 className="size-3.5" />
-          </button>
-          <div className="w-px h-4 bg-border/50 mx-0.5"></div>
+          {(field.type === FieldType.SIGNATURE || field.type === FieldType.SEAL) && (
+            <>
+              <button 
+                onMouseDown={(e) => { 
+                  e.stopPropagation(); 
+                  onSelect(field.id, true); // EXPLICITLY open modal
+                }}
+                className="p-1.5 bg-primary/10 hover:bg-primary/20 rounded text-primary transition-colors flex items-center gap-1.5 px-2.5"
+                title={field.value ? t('common.edit') : t('common.sign')}
+              >
+                <PenTool className="size-3.5" />
+                <span className="text-[10px] font-bold uppercase tracking-wider">
+                  {field.value ? 'Change' : 'Sign'}
+                </span>
+              </button>
+              <div className="w-px h-4 bg-border/50 mx-0.5"></div>
+            </>
+          )}
+          
           <button 
             onMouseDown={(e) => { e.stopPropagation(); onRemove(field.id); }}
             className="p-1.5 hover:bg-destructive/10 rounded text-muted-foreground hover:text-destructive transition-colors"
+            title={t('common.delete')}
           >
             <Trash2 className="size-3.5" />
           </button>

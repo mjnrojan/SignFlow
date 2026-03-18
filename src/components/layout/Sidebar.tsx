@@ -2,8 +2,6 @@ import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
   FileText,
-  Copy,
-  BarChart3,
   Users,
   Settings,
   PanelLeftClose,
@@ -25,10 +23,8 @@ interface INavItem {
 const NAV_ITEMS: INavItem[] = [
   { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, translationKey: 'sidebar.dashboard' },
   { name: 'Documents', path: '/documents', icon: FileText, translationKey: 'sidebar.documents' },
-  { name: 'Templates', path: '/templates', icon: Copy, translationKey: 'sidebar.templates' },
   { name: 'Signatures', path: '/vault', icon: PenLine, translationKey: 'sidebar.signatures' },
   { name: 'Contacts', path: '/contacts', icon: Users, section: 'Administration', translationKey: 'sidebar.contacts' },
-  { name: 'Analytics', path: '/analytics', icon: BarChart3, translationKey: 'sidebar.analytics' },
   { name: 'Settings', path: '/settings', icon: Settings, translationKey: 'sidebar.settings' },
 ];
 

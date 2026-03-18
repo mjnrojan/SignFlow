@@ -28,14 +28,11 @@ export default function SigningPage() {
   const [signatureData, setSignatureData] = useState<string | null>(null);
 
   useEffect(() => {
-    const documentId = token?.includes('doc') ? token : 'doc_1';
-    
-    const timer = setTimeout(() => {
-      setActiveDocument(documentId);
+    if (token) {
+      const docId = token.startsWith('doc_') ? token : 'doc_1';
+      setActiveDocument(docId);
       setLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
+    }
   }, [token, setActiveDocument]);
 
   const handleComplete = () => {

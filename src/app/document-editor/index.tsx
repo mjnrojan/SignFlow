@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   DndContext, 
@@ -23,26 +23,40 @@ import { FieldToolbar } from '@/components/document-editor/FieldToolbar';
 import { CanvasContainer } from '@/components/document-editor/CanvasContainer';
 import { PropertiesPanel } from '@/components/document-editor/PropertiesPanel';
 import { useDocumentStore } from '@/lib/stores/useDocumentStore';
+import { useUserStore } from '@/lib/stores/useUserStore';
 import { FieldType } from '@/types/document.types';
 import { useTranslation } from 'react-i18next';
 import { EditorSkeleton } from '@/components/shared/EditorSkeleton';
+import { SignatureModal } from '@/components/signature/SignatureModal';
 
 export default function DocumentEditorPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { activeDocument, setActiveDocument, addField, removeField, updateField } = useDocumentStore();
+  const { user } = useUserStore();
   
   const [activeFieldId, setActiveFieldId] = useState<string | null>(null);
   const [activeDragType, setActiveDragType] = useState<FieldType | null>(null);
   const [selectedRecipientId, setSelectedRecipientId] = useState<string | null>('rec_1');
   const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Simulated loading delay
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleSelectField = (id: string, forceOpenModal = false) => {
+    const field = activeDocument?.fields.find(f => f.id === id);
+    
+    if (forceOpenModal && field && (field.type === FieldType.SIGNATURE || field.type === FieldType.SEAL)) {
+      setIsModalOpen(true);
+    }
+    
+    setActiveFieldId(id);
+  };
 
   // Initialize sensors for dnd-kit
   const sensors = useSensors(
@@ -54,7 +68,7 @@ export default function DocumentEditorPage() {
   );
 
   // Load document
-  useMemo(() => {
+  useEffect(() => {
     if (id) {
        setActiveDocument(id);
     }
@@ -76,37 +90,42 @@ export default function DocumentEditorPage() {
       const type = active.data.current?.type as FieldType;
       const pageNumber = over.data.current?.pageNumber as number;
       
-      // Get the page dimensions from the over element's rect
       const pageRect = over.rect;
-      
-      // Calculate relative coordinates in pixels
-      const pixelX = active.rect.current.translated 
-        ? active.rect.current.translated.left - pageRect.left 
-        : 0;
-      const pixelY = active.rect.current.translated 
-        ? active.rect.current.translated.top - pageRect.top 
-        : 0;
-      
-      // Convert to percentages (0-1) for persistence
-      const x = Math.max(0, Math.min(1, pixelX / pageRect.width));
-      const y = Math.max(0, Math.min(1, pixelY / pageRect.height));
-      
-      const newField = {
-        id: `field-${Date.now()}`,
-        type: type || FieldType.SIGNATURE,
-        position: { 
-          x, 
-          y, 
-          width: 0.15, // 15% width by default
-          height: 0.08, // 8% height by default
-          pageNumber 
-        },
-        required: true,
-        recipientId: selectedRecipientId || undefined
-      };
-      
-      addField(newField);
-      setActiveFieldId(newField.id);
+      const activeRect = active.rect.current.translated;
+
+      if (activeRect && pageRect) {
+        // Use center of the dragged item for placement
+        const centerX = activeRect.left + activeRect.width / 2;
+        const centerY = activeRect.top + activeRect.height / 2;
+
+        const pixelX = centerX - pageRect.left;
+        const pixelY = centerY - pageRect.top;
+        
+        // Convert to percentages (0-1) for persistence
+        const x = Math.max(0, Math.min(1, pixelX / pageRect.width));
+        const y = Math.max(0, Math.min(1, pixelY / pageRect.height));
+        
+        const newField = {
+          id: `field-${Date.now()}`,
+          type: type || FieldType.SIGNATURE,
+          position: { 
+            x: x - 0.075, // Adjust by half of default width (0.15/2) to center it
+            y: y - 0.04,  // Adjust by half of default height (0.08/2) to center it
+            width: 0.15,
+            height: 0.08,
+            pageNumber 
+          },
+          required: true,
+          recipientId: selectedRecipientId || undefined
+        };
+        
+        // Ensure bounds
+        newField.position.x = Math.max(0, Math.min(0.85, newField.position.x));
+        newField.position.y = Math.max(0, Math.min(0.92, newField.position.y));
+
+        addField(newField);
+        setActiveFieldId(newField.id);
+      }
     }
   };
 
@@ -139,7 +158,7 @@ export default function DocumentEditorPage() {
             fileUrl={activeDocument.fileUrl}
             fields={activeDocument.fields}
             activeFieldId={activeFieldId}
-            onSelectField={setActiveFieldId}
+            onSelectField={handleSelectField}
             onRemoveField={removeField}
             onUpdateField={updateField}
           />
@@ -153,6 +172,36 @@ export default function DocumentEditorPage() {
           onRemove={removeField}
         />
       </EditorLayout>
+
+      {/* Signature Modal for Signing Fields */}
+      {currentField && (currentField.type === FieldType.SIGNATURE || currentField.type === FieldType.SEAL) && (
+        <SignatureModal 
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSelect={(dataUrl: string) => {
+            const targetId = activeFieldId || currentField.id;
+            console.log(`[SignFlow] Adopting sign for field: ${targetId}, Data: ${dataUrl.substring(0, 50)}...`);
+            
+            if (targetId) {
+              // FOR DEBUGGING: Show alert to confirm code reachability
+              // alert(`Signature captured for ${targetId}. Applying...`);
+              
+              updateField(targetId, { value: dataUrl });
+              
+              // Ensure we close the modal after a small delay
+              setTimeout(() => {
+                setIsModalOpen(false);
+                console.log('[SignFlow] Modal closed.');
+              }, 100);
+            } else {
+              console.error('[SignFlow] No active field ID found for adoption');
+              setIsModalOpen(false);
+            }
+          }}
+          type={currentField.type === FieldType.SEAL ? 'seal' : 'signature'}
+          defaultName={user?.name || t('common.yourName')}
+        />
+      )}
 
       {/* Drag Overlay for smooth UI */}
       <DragOverlay dropAnimation={{

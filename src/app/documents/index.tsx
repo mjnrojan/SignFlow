@@ -28,6 +28,7 @@ export default function DocumentsListPage() {
   const { data: documents, isLoading } = useDocuments();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<DocumentStatus | 'ALL'>('ALL');
+  const [directionFilter, setDirectionFilter] = useState<'ALL' | 'sent' | 'received'>('ALL');
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
@@ -38,9 +39,10 @@ export default function DocumentsListPage() {
       const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           doc.id.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus = statusFilter === 'ALL' || doc.status === statusFilter;
-      return matchesSearch && matchesStatus;
+      const matchesDirection = directionFilter === 'ALL' || doc.direction === directionFilter;
+      return matchesSearch && matchesStatus && matchesDirection;
     });
-  }, [documents, searchTerm, statusFilter]);
+  }, [documents, searchTerm, statusFilter, directionFilter]);
 
   // Selection logic
   const toggleSelection = (id: string) => {
@@ -95,6 +97,23 @@ export default function DocumentsListPage() {
             <span className="font-['Syne']">{t('documents.newDoc')}</span>
           </button>
         </div>
+      </div>
+
+      {/* Direction Tabs */}
+      <div className="flex bg-muted/50 p-1.5 rounded-xl w-fit">
+        {(['ALL', 'sent', 'received'] as const).map(tab => (
+          <button
+            key={tab}
+            onClick={() => setDirectionFilter(tab)}
+            className={`px-6 py-2 rounded-lg text-sm font-bold transition-all capitalize ${
+              directionFilter === tab 
+                ? 'bg-background text-foreground shadow-sm' 
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            {tab === 'ALL' ? 'All Documents' : tab}
+          </button>
+        ))}
       </div>
 
       {/* Toolbar */}
@@ -199,7 +218,12 @@ export default function DocumentsListPage() {
                         >
                           {doc.title}
                         </p>
-                        <p className="text-[10px] text-muted-foreground font-mono">ID: {doc.id.toUpperCase()}</p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className={`text-[9px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded-md ${doc.direction === 'sent' ? 'bg-primary/10 text-primary' : 'bg-secondary/10 text-secondary'}`}>
+                            {doc.direction}
+                          </span>
+                          <p className="text-[10px] text-muted-foreground font-mono">ID: {doc.id.toUpperCase()}</p>
+                        </div>
                       </div>
                     </div>
                   </td>

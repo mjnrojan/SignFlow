@@ -24,15 +24,14 @@ interface DraggableFieldItemProps {
 }
 
 function DraggableFieldItem({ type, label, icon }: DraggableFieldItemProps) {
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: `toolbar-${type}`,
     data: { type }
   });
 
-  const style = transform ? {
-    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-    zIndex: 100,
-    opacity: 0.8
+  const style = isDragging ? {
+    opacity: 0.3,
+    cursor: 'grabbing'
   } : undefined;
 
   return (

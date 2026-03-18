@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 interface TypeSignatureProps {
   onSave: (dataUrl: string) => void;
@@ -9,71 +10,126 @@ interface TypeSignatureProps {
 }
 
 const FONTS = [
-  { name: 'Alex Brush', class: 'font-alex-brush' },
-  { name: 'Great Vibes', class: 'font-great-vibes' },
-  { name: 'Dancing Script', class: 'font-dancing-script' },
-  { name: 'Satisfy', class: 'font-satisfy' },
+  { name: 'Alex Brush', family: '"Alex Brush", cursive', class: 'font-alex-brush' },
+  { name: 'Great Vibes', family: '"Great Vibes", cursive', class: 'font-great-vibes' },
+  { name: 'Dancing Script', family: '"Dancing Script", cursive', class: 'font-dancing-script' },
+  { name: 'Satisfy', family: '"Satisfy", cursive', class: 'font-satisfy' },
 ];
 
 export function TypeSignature({ onSave, defaultName = '' }: TypeSignatureProps) {
+  const { t } = useTranslation();
   const [text, setText] = useState(defaultName);
   const [selectedFont, setSelectedFont] = useState(FONTS[0]);
+  const [isSaving, setIsSaving] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const handleSave = () => {
-    if (!text.trim()) return;
+    if (!text.trim() || isSaving) return;
     
-    // In a real app, we'd render this to a hidden canvas and get the data URL.
-    // For the demo, we'll simulate the "capturing" of the text signature.
-    // We can use a placeholder image or a generated SVG data URL if needed.
-    // For now, let's just use the text as a placeholder or a generic signature image.
-    onSave('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMTAwIj48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjI0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJibGFjayI+U2lnbmF0dXJlPC90ZXh0Pjwvc3ZnPg==');
+    setIsSaving(true);
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      setIsSaving(false);
+      return;
+    }
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      setIsSaving(false);
+      return;
+    }
+
+    console.log('[TypeSignature] Rendering signature for:', text);
+
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Set font style
+    ctx.fillStyle = '#1D4ED8'; 
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = `60px ${selectedFont.family}`;
+    
+    // Render text
+    ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+
+    try {
+        const dataUrl = canvas.toDataURL('image/png');
+        console.log('[TypeSignature] Success, length:', dataUrl.length);
+        onSave(dataUrl);
+    } catch (err) {
+        console.error('[TypeSignature] Capture error:', err);
+    }
+
+    // Reset saving state after a delay if modal persists
+    setTimeout(() => setIsSaving(false), 2000);
   };
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-2">
-        <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest pl-1">
-          Type your name
+    <div className="space-y-4">
+      {/* Hidden canvas for rendering the signature */}
+      <canvas 
+        ref={canvasRef} 
+        width={600} 
+        height={200} 
+        className="hidden"
+      />
+ 
+      <div className="space-y-1.5">
+        <label className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest pl-1 opacity-70">
+          {t('settings.profile.fullName')}
         </label>
         <Input
           value={text}
+          disabled={isSaving}
           onChange={(e) => setText(e.target.value)}
           placeholder="Enter your full name"
-          className="h-12 rounded-xl border-border bg-muted/20 focus:bg-background transition-all font-['Syne']"
+          className="h-10 rounded-xl border-border bg-muted/20 focus:bg-background transition-all font-['Syne'] text-xs"
         />
       </div>
-
-      <div className="space-y-2">
-         <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest pl-1">
-          Select Style
+ 
+      <div className="space-y-1.5">
+         <label className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest pl-1 opacity-70">
+          Choose Script Style
         </label>
-        <div className="grid grid-cols-1 gap-3">
+        <div className="grid grid-cols-1 gap-2 max-h-[160px] overflow-y-auto pr-1 custom-scrollbar">
           {FONTS.map((font) => (
             <button
               key={font.name}
+              disabled={isSaving}
               onClick={() => setSelectedFont(font)}
               className={cn(
-                "w-full h-20 rounded-xl border-2 transition-all flex flex-col items-center justify-center bg-white dark:bg-slate-900 group",
+                "w-full h-14 shrink-0 rounded-xl border transition-all flex flex-col items-center justify-center bg-white dark:bg-slate-950 group relative overflow-hidden",
                 selectedFont.name === font.name 
-                  ? "border-primary bg-primary/5" 
-                  : "border-border hover:border-primary/30"
+                  ? "border-primary bg-primary/5 shadow-sm" 
+                  : "border-border hover:border-primary/20"
               )}
             >
-              <span className={cn("text-3xl text-foreground group-hover:scale-110 transition-transform", font.class)}>
+              <span 
+                className={cn("text-xl text-foreground group-hover:scale-105 transition-transform", font.class)}
+                style={{ fontFamily: font.family }}
+              >
                 {text || 'Signature'}
               </span>
-              <span className="text-[8px] text-muted-foreground mt-1 uppercase tracking-tighter">{font.name}</span>
+              <span className="text-[7px] text-muted-foreground mt-0.5 uppercase tracking-tighter opacity-50">{font.name}</span>
+              {selectedFont.name === font.name && (
+                <div className="absolute top-1 right-1 size-1.5 bg-primary rounded-full" />
+              )}
             </button>
           ))}
         </div>
       </div>
-
+ 
       <Button 
-        className="w-full rounded-xl h-12 font-bold" 
-        onClick={handleSave}
-        disabled={!text.trim()}
+        type="button"
+        disabled={isSaving || !text.trim()}
+        className="w-full rounded-xl h-11 font-bold shadow-lg shadow-primary/10 bg-primary text-white hover:bg-primary/90 transition-all active:scale-[0.98] mt-2" 
+        onClick={(e) => {
+          e.preventDefault();
+          handleSave();
+        }}
       >
-        Use this Signature
+        {isSaving ? 'Processing...' : 'Adopt and Sign'}
       </Button>
     </div>
   );

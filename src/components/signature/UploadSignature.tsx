@@ -35,18 +35,18 @@ export function UploadSignature({ onSave }: UploadSignatureProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {!preview ? (
         <div 
           onClick={() => fileInputRef.current?.click()}
-          className="h-64 border-2 border-dashed border-border rounded-2xl flex flex-col items-center justify-center gap-4 bg-muted/10 hover:bg-muted/20 hover:border-primary/30 transition-all cursor-pointer group"
+          className="h-52 border border-dashed border-border rounded-xl flex flex-col items-center justify-center gap-3 bg-muted/5 hover:bg-muted/10 hover:border-primary/20 transition-all cursor-pointer group"
         >
-          <div className="size-16 bg-background rounded-2xl shadow-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-            <Upload className="size-8 text-primary" />
+          <div className="size-12 bg-background rounded-xl shadow-md flex items-center justify-center group-hover:scale-105 transition-transform">
+            <Upload className="size-5 text-primary" />
           </div>
-          <div className="text-center">
-             <p className="text-sm font-bold font-['Fraunces'] text-foreground">Upload image of signature</p>
-             <p className="text-[10px] text-muted-foreground font-['Syne'] mt-1">PNG, JPG up to 5MB. Transparent background preferred.</p>
+          <div className="text-center px-4">
+             <p className="text-xs font-bold font-['Fraunces'] text-foreground">Upload image of signature</p>
+             <p className="text-[9px] text-muted-foreground font-['Syne'] mt-1 opacity-70">PNG, JPG up to 5MB. Transparent preferred.</p>
           </div>
           <input 
             type="file" 
@@ -57,27 +57,27 @@ export function UploadSignature({ onSave }: UploadSignatureProps) {
           />
         </div>
       ) : (
-        <div className="space-y-4">
-          <div className="relative h-64 border border-border rounded-xl bg-white dark:bg-slate-900 flex items-center justify-center p-8 overflow-hidden">
+        <div className="space-y-3">
+          <div className="relative h-52 border border-border rounded-xl bg-white dark:bg-slate-950 flex items-center justify-center p-6 overflow-hidden">
              <img src={preview} alt="Signature Preview" className="max-w-full max-h-full object-contain" />
              <Button 
               variant="destructive" 
               size="icon" 
-              className="absolute top-2 right-2 size-8 rounded-full"
+              className="absolute top-2 right-2 size-7 rounded-lg"
               onClick={clear}
              >
-                <X className="size-4" />
+                <X className="size-3" />
              </Button>
           </div>
-          <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase tracking-widest bg-muted/30 p-2 rounded-lg">
-             <FileImage className="size-4 text-primary" />
+          <div className="flex items-center gap-2 text-[9px] font-bold text-muted-foreground uppercase tracking-widest bg-muted/20 p-2 rounded-lg">
+             <FileImage className="size-3 text-primary" />
              Image Preview Ready
           </div>
         </div>
       )}
-
+ 
       <Button 
-        className="w-full rounded-xl h-12 font-bold" 
+        className="w-full rounded-xl h-11 font-bold shadow-lg shadow-primary/10 bg-primary text-white hover:bg-primary/90 transition-all active:scale-[0.98]" 
         onClick={handleSave}
         disabled={!preview}
       >

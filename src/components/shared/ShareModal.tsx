@@ -6,9 +6,11 @@ import {
   Mail, 
   Smartphone, 
   Link as LinkIcon,
-  Globe
+  Globe,
+  ShieldCheck
 } from 'lucide-react';
 import { useState } from 'react';
+import { cn } from '@/lib/utils';
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -30,125 +32,137 @@ export function ShareModal({ isOpen, onClose, documentTitle, shareUrl }: ShareMo
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/40 backdrop-blur-md animate-in fade-in duration-300" onClick={onClose}>
       <div 
-        className="bg-card w-full max-w-lg rounded-[2.5rem] border border-border shadow-2xl overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-8 duration-500"
+        className="bg-background/98 dark:bg-slate-950/98 backdrop-blur-2xl w-full max-w-md rounded-2xl border border-white/10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] dark:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-4 duration-500"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="relative p-8 pb-4 text-center">
+        <div className="relative p-6 pb-2 text-center">
           <button 
             onClick={onClose}
-            className="absolute top-6 right-6 p-2 hover:bg-muted rounded-full text-muted-foreground transition-all"
+            className="absolute top-5 right-5 p-1.5 hover:bg-muted rounded-lg text-muted-foreground transition-all"
           >
-            <X className="size-5" />
+            <X className="size-4" />
           </button>
           
-          <div className="size-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-             <ShareIcon className="size-8 text-primary" />
+          <div className="size-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+             <ShareIcon className="size-6 text-primary" />
           </div>
-          <h2 className="text-2xl font-bold font-['Fraunces'] text-foreground">Share Document</h2>
-          <p className="text-sm text-muted-foreground font-['Syne'] mt-1 truncate max-w-[80%] mx-auto">
+          <h2 className="text-xl font-bold font-['Fraunces'] text-foreground tracking-tight">Access Control</h2>
+          <p className="text-[10px] text-muted-foreground font-['Syne'] mt-1 truncate max-w-[85%] mx-auto font-bold uppercase tracking-widest opacity-70">
             {documentTitle}
           </p>
         </div>
-
+ 
         {/* Tabs */}
-        <div className="flex px-8 border-b border-border">
-          <button 
-            onClick={() => setActiveTab('link')}
-            className={`flex-1 py-4 text-xs font-bold uppercase tracking-widest transition-all border-b-2 ${activeTab === 'link' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'}`}
-          >
-            Public Link
-          </button>
-          <button 
-            onClick={() => setActiveTab('recipients')}
-            className={`flex-1 py-4 text-xs font-bold uppercase tracking-widest transition-all border-b-2 ${activeTab === 'recipients' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'}`}
-          >
-            Invite People
-          </button>
+        <div className="flex px-6 mt-4">
+          <div className="flex w-full bg-muted/30 p-1 rounded-xl">
+            <button 
+              onClick={() => setActiveTab('link')}
+              className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-widest transition-all rounded-lg ${activeTab === 'link' ? 'bg-background text-primary shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              Public Link
+            </button>
+            <button 
+              onClick={() => setActiveTab('recipients')}
+              className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-widest transition-all rounded-lg ${activeTab === 'recipients' ? 'bg-background text-primary shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              Invite People
+            </button>
+          </div>
         </div>
-
-        <div className="p-8 space-y-6">
+ 
+        <div className="p-6 space-y-5">
           {activeTab === 'link' ? (
-            <div className="space-y-6">
+            <div className="space-y-5 animate-in fade-in duration-300">
               {/* Copy Link Section */}
-              <div className="space-y-3">
-                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest pl-1">Copy Public Link</label>
+              <div className="space-y-2">
+                <label className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest pl-1 opacity-70">Copy Web URL</label>
                 <div className="flex gap-2">
-                  <div className="flex-1 bg-muted/50 border border-border rounded-xl px-4 py-3 flex items-center gap-2 overflow-hidden">
-                    <LinkIcon className="size-4 text-muted-foreground shrink-0" />
-                    <span className="text-sm text-foreground truncate select-all">{shareUrl}</span>
+                  <div className="flex-1 bg-muted/20 border border-border/50 rounded-xl px-4 py-2.5 flex items-center gap-2 overflow-hidden">
+                    <LinkIcon className="size-3.5 text-muted-foreground shrink-0" />
+                    <span className="text-xs text-foreground truncate select-all font-['DM Mono']">{shareUrl}</span>
                   </div>
                   <button 
                     onClick={handleCopy}
-                    className={`px-5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 shrink-0 ${copied ? 'bg-green-500 text-white' : 'bg-primary text-white shadow-lg shadow-primary/20 hover:scale-105'}`}
+                    className={cn(
+                      "px-4 rounded-xl font-bold text-xs transition-all flex items-center gap-1.5 shrink-0",
+                      copied ? "bg-green-500 text-white" : "bg-primary text-white shadow-lg shadow-primary/10 hover:scale-105 active:scale-95"
+                    )}
                   >
-                    {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
-                    <span>{copied ? 'Copied' : 'Copy'}</span>
+                    {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+                    <span>{copied ? 'Done' : 'Copy'}</span>
                   </button>
                 </div>
               </div>
-
+ 
               {/* Quick Share Grid */}
-              <div className="space-y-3">
-                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest pl-1">Share via Apps</label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                   <ShareButton icon={<MessageCircle className="size-5" />} label="WhatsApp" color="bg-[#25D366]" />
-                   <ShareButton icon={<Smartphone className="size-5" />} label="Viber" color="bg-[#7360f2]" />
-                   <ShareButton icon={<Mail className="size-5" />} label="Email" color="bg-[#EA4335]" />
-                   <ShareButton icon={<Globe className="size-5" />} label="Others" color="bg-slate-700" />
+              <div className="space-y-2">
+                <label className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest pl-1 opacity-70">Distribution Channels</label>
+                <div className="grid grid-cols-4 gap-2">
+                   <ShareButton icon={<MessageCircle className="size-4" />} label="WhatsApp" color="bg-[#25D366]" />
+                   <ShareButton icon={<Smartphone className="size-4" />} label="Viber" color="bg-[#7360f2]" />
+                   <ShareButton icon={<Mail className="size-4" />} label="Email" color="bg-[#EA4335]" />
+                   <ShareButton icon={<Globe className="size-4" />} label="Others" color="bg-slate-700" />
                 </div>
               </div>
             </div>
           ) : (
-            <div className="space-y-6">
-               <div className="space-y-3">
-                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest pl-1">Add Signers/Viewers</label>
+            <div className="space-y-5 animate-in fade-in duration-300">
+               <div className="space-y-2">
+                <label className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest pl-1 opacity-70">Add New Member</label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
                   <input 
                     type="email" 
-                    placeholder="Enter email address..."
-                    className="w-full bg-muted/50 border border-transparent focus:border-primary/20 rounded-xl pl-10 pr-4 py-3 text-sm outline-none transition-all"
+                    placeholder="name@company.com"
+                    className="w-full bg-muted/20 border border-border/50 focus:border-primary/20 rounded-xl pl-10 pr-4 py-2.5 text-xs outline-none transition-all font-['Syne']"
                   />
-                  <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-foreground text-background px-3 py-1 rounded-lg text-xs font-bold font-['Syne']">
+                  <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-foreground dark:bg-slate-800 text-background dark:text-white px-3 py-1 rounded-lg text-xs font-bold font-['Syne'] hover:scale-105 active:scale-95 transition-all">
                     Add
                   </button>
                 </div>
               </div>
-
-              <div className="space-y-3">
-                 <div className="flex items-center justify-between">
-                    <h4 className="text-xs font-bold text-foreground">Who has access</h4>
-                    <span className="text-[10px] text-muted-foreground uppercase">2 People</span>
+ 
+              <div className="space-y-2">
+                 <div className="flex items-center justify-between px-1">
+                    <h4 className="text-[10px] font-bold text-foreground uppercase tracking-tight">Active Permissions</h4>
+                    <span className="text-[8px] text-muted-foreground font-bold uppercase tracking-widest opacity-60">2 Collaborators</span>
                  </div>
-                 <div className="space-y-2">
-                    <AccessItem name="Aarav Sharma" email="aarav@nepal.np" role="Owner" />
-                    <AccessItem name="Bikash Tamang" email="bikash@enterprise.co" role="Editor" />
+                 <div className="space-y-1 bg-muted/5 rounded-2xl p-1 border border-border/50">
+                    <AccessItem name="Aarav Sharma" email="aarav@signflow.np" role="Owner" />
+                    <AccessItem name="Bikash Tamang" email="bikash@tamang.com" role="Viewer" />
                  </div>
               </div>
             </div>
           )}
-
-          <div className="flex items-center gap-2 p-4 bg-primary/5 border border-primary/20 rounded-2xl">
-             <LinkIcon className="size-4 text-primary shrink-0" />
-             <p className="text-[10px] text-slate-600 dark:text-slate-400 font-['Syne'] leading-relaxed">
-               Anyone with the link can view this document for the next 30 days unless restricted in settings.
+ 
+          <div className="flex items-center gap-3 p-3 bg-secondary/5 border border-secondary/10 rounded-xl">
+             <div className="size-6 bg-secondary/10 rounded-lg flex items-center justify-center shrink-0">
+                <ShieldCheck className="size-3.5 text-secondary" />
+             </div>
+             <p className="text-[8px] text-muted-foreground font-bold uppercase tracking-wider leading-relaxed">
+               Secure SSL uplink active. Link expires in 30 days.
              </p>
           </div>
         </div>
-
-        <div className="p-6 bg-muted/30 border-t border-border flex justify-end gap-3">
-          <button 
-            onClick={onClose}
-            className="px-6 py-2.5 rounded-xl font-bold text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
-          >
-            Cancel
-          </button>
-          <button className="px-8 py-2.5 bg-secondary text-white rounded-xl font-bold text-sm shadow-lg shadow-secondary/20 transition-all hover:scale-105 active:scale-95">
-            Save Changes
-          </button>
+ 
+        <div className="p-4 px-6 bg-muted/10 border-t border-border/50 flex justify-between items-center">
+          <div className="text-[8px] text-muted-foreground font-bold uppercase tracking-[0.2em] opacity-40">
+            SignFlow Nepal v2.4
+          </div>
+          <div className="flex gap-2">
+            <button 
+              onClick={onClose}
+              className="px-4 py-2 rounded-xl font-bold text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
+            >
+              Cancel
+            </button>
+            <button className="px-6 py-2 bg-secondary text-white rounded-xl font-bold text-xs shadow-lg shadow-secondary/10 hover:scale-105 active:scale-95 transition-all">
+              Save
+            </button>
+          </div>
         </div>
       </div>
     </div>

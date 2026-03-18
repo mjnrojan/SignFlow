@@ -36,6 +36,7 @@ export interface IDocument {
   id: string;
   title: string;
   status: DocumentStatus;
+  direction: 'sent' | 'received'; // Added for M12
   createdAt: string;
   updatedAt: string;
   sentAt?: string;

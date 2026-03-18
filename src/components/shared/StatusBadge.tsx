@@ -10,9 +10,13 @@ export function StatusBadge({ status }: IStatusBadgeProps) {
 
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold border ${config.bgClass} ${config.textClass} ${config.borderClass}`}
+      className={`
+        inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[9px] font-bold uppercase tracking-widest border shadow-sm transition-all
+        ${config.bgClass} ${config.textClass} ${config.borderClass}
+      `}
     >
-      {config.label}
+      <span className="size-1.5 rounded-full bg-current animate-pulse duration-[2000ms]" />
+      <span className="font-['Syne']">{config.label}</span>
     </span>
   );
 }

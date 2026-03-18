@@ -10,9 +10,9 @@ import { ErrorBoundary } from './components/error-boundary';
 
 // Lazy-loaded route pages
 const Dashboard = React.lazy(() => import('./app/dashboard/index'));
-const Analytics = React.lazy(() => import('./app/analytics/index'));
+// const Analytics = React.lazy(() => import('./app/analytics/index')); // M11: merged into dashboard
 const DocumentsList = React.lazy(() => import('./app/documents/index'));
-const Templates = React.lazy(() => import('./app/templates/index'));
+// const Templates = React.lazy(() => import('./app/templates/index')); // M11: hidden for now
 const Vault = React.lazy(() => import('./app/vault/index'));
 const Contacts = React.lazy(() => import('./app/contacts/index'));
 const Settings = React.lazy(() => import('./app/settings/index'));
@@ -102,14 +102,15 @@ function AppRouter() {
                 </Suspense>
               ),
             },
-            {
-              path: '/analytics',
-              element: (
-                <Suspense fallback={<PageSkeleton />}>
-                  <Analytics />
-                </Suspense>
-              ),
-            },
+            // M11: Analytics merged into dashboard — route hidden
+            // {
+            //   path: '/analytics',
+            //   element: (
+            //     <Suspense fallback={<PageSkeleton />}>
+            //       <Analytics />
+            //     </Suspense>
+            //   ),
+            // },
             {
               path: '/contacts',
               element: (
@@ -134,14 +135,15 @@ function AppRouter() {
                 </Suspense>
               ),
             },
-            {
-              path: '/templates',
-              element: (
-                <Suspense fallback={<PageSkeleton />}>
-                  <Templates />
-                </Suspense>
-              ),
-            },
+            // M11: Templates hidden for now
+            // {
+            //   path: '/templates',
+            //   element: (
+            //     <Suspense fallback={<PageSkeleton />}>
+            //       <Templates />
+            //     </Suspense>
+            //   ),
+            // },
             {
               path: '/vault',
               element: (

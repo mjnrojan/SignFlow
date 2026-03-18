@@ -55,26 +55,37 @@ export const useDocumentStore = create<DocumentState>()(
       }),
     updateField: (fieldId, updates) =>
       set((state) => {
-        if (state.activeDocument) {
-          const field = state.activeDocument.fields.find(f => f.id === fieldId);
-          if (field) {
-            Object.assign(field, updates);
-            
-            // Handle nested position update if provided partially
-            if (updates.position) {
-              field.position = { ...field.position, ...updates.position };
+        const activeDoc = state.activeDocument;
+        if (!activeDoc) return;
+
+        // 1. Update in activeDocument
+        const fieldIndex = activeDoc.fields.findIndex(f => f.id === fieldId);
+        if (fieldIndex !== -1) {
+          const oldField = activeDoc.fields[fieldIndex];
+          // Create a completely new object to force reactivity
+          activeDoc.fields[fieldIndex] = { 
+            ...oldField, 
+            ...updates,
+            position: updates.position 
+              ? { ...oldField.position, ...updates.position } 
+              : oldField.position
+          };
+        }
+        
+        // 2. Double check sync with the master documents list
+        const docIndex = state.documents.findIndex(d => d.id === activeDoc.id);
+        if (docIndex !== -1) {
+          const listDoc = state.documents[docIndex];
+          const listFieldIndex = listDoc.fields.findIndex(f => f.id === fieldId);
+          if (listFieldIndex !== -1) {
+            const listField = listDoc.fields[listFieldIndex];
+            if (updates.value !== undefined) {
+               console.log(`[Store] Updating field ${fieldId} with value (len: ${updates.value.length})`);
+               listField.value = updates.value;
             }
-          }
-          
-          // Sync to master list
-          const docIndex = state.documents.findIndex((d) => d.id === state.activeDocument!.id);
-          if (docIndex !== -1) {
-            const listField = state.documents[docIndex].fields.find(f => f.id === fieldId);
-            if (listField) {
-              Object.assign(listField, updates);
-              if (updates.position) {
-                listField.position = { ...listField.position, ...updates.position };
-              }
+            if (updates.recipientId !== undefined) listField.recipientId = updates.recipientId;
+            if (updates.position) {
+              listField.position = { ...listField.position, ...updates.position };
             }
           }
         }

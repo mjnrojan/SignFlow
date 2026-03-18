@@ -40,22 +40,33 @@ src/
 │   ├── auth/
 │   │   ├── login/index.tsx
 │   │   └── signup/index.tsx
-│   ├── dashboard/index.tsx
+│   ├── dashboard/index.tsx      # Main dashboard with merged analytics charts
 │   ├── documents/
 │   │   ├── index.tsx           # Documents list
 │   │   ├── upload/index.tsx
-│   │   ├── [id]/
-│   │   │   ├── index.tsx       # Document viewer
-│   │   │   ├── edit/index.tsx  # Field placement editor
-│   │   │   ├── recipients/index.tsx
-│   │   │   └── send/index.tsx
+│   │   ├── view/index.tsx      # Document viewer
+│   │   ├── send/index.tsx      # Send flow
+│   │   └── [id]/
+│   │       └── edit/index.tsx  # Field placement editor
+│   ├── document-editor/index.tsx
 │   ├── sign/
 │   │   └── [token]/index.tsx   # Public signing page (no auth)
-│   ├── templates/index.tsx
-│   ├── contacts/index.tsx
-│   ├── analytics/index.tsx
-│   ├── vault/index.tsx
-│   └── settings/index.tsx
+│   ├── templates/index.tsx     # HIDDEN — commented out in router, kept for future use
+│   ├── analytics/index.tsx     # DEPRECATED — merged into dashboard, kept for reference
+│   ├── contacts/
+│   │   ├── index.tsx
+│   │   └── components/
+│   │       └── ContactEditModal.tsx   # NEW — Add/edit contact modal
+│   ├── signatures/
+│   │   ├── index.tsx                  # NEW — Standalone signature management page
+│   │   └── components/
+│   │       └── SignatureCreateModal.tsx # NEW — Create/edit signature with color picker
+│   ├── administration/
+│   │   └── company/
+│   │       └── index.tsx              # NEW — Company management page
+│   ├── vault/index.tsx         # Secure Vault — now shows sent + received documents
+│   ├── not-found/index.tsx
+│   └── settings/index.tsx      # Simplified — signatures tab removed
 │
 ├── components/
 │   ├── ui/                     # shadcn/ui components (never manually edited)
@@ -70,7 +81,13 @@ src/
 │   │   ├── FieldToolbar.tsx    # Left panel: draggable field type buttons
 │   │   ├── CanvasContainer.tsx # Center: PDF page + absolutely positioned field overlays
 │   │   ├── FieldOverlay.tsx    # Individual placed field (draggable/resizable on canvas)
-│   │   └── PropertiesPanel.tsx # Right panel: selected field properties editor
+│   │   ├── PropertiesPanel.tsx # Right panel: selected field properties editor
+│   │   ├── SigningModeSelector.tsx   # NEW — Sequential / Parallel / Bulk toggle
+│   │   ├── RolePanel.tsx            # NEW — Add/edit/reorder named roles
+│   │   ├── SigningOrderStep.tsx     # NEW — Drag-to-reorder for sequential mode
+│   │   ├── RoleAssignmentStep.tsx   # NEW — Map roles to real emails
+│   │   ├── BulkUploadStep.tsx       # NEW — CSV upload + field mapping
+│   │   └── ReviewAndSendStep.tsx    # NEW — Final review before sending
 │   │
 │   ├── signature/
 │   │   ├── SignatureModal.tsx  # Tabbed modal: Draw / Type / Upload
@@ -82,7 +99,8 @@ src/
 │   ├── viewer/
 │   │   ├── PDFViewer.tsx       # react-pdf Document + Page renderer
 │   │   ├── AuditPanel.tsx      # Collapsible audit info sidebar
-│   │   └── AuditTimeline.tsx   # Chronological event list with icons and timestamps
+│   │   ├── AuditTimeline.tsx   # Chronological event list with icons and timestamps
+│   │   └── SigningProgressBar.tsx   # NEW — Chain (sequential) or counter (parallel) progress
 │   │
 │   └── shared/
 │       ├── StatusBadge.tsx     # Document status pill (Draft/Sent/Signed/etc)
@@ -90,26 +108,38 @@ src/
 │       ├── RecipientRow.tsx    # Signer row with avatar, name, status, order badge
 │       ├── PageSkeleton.tsx    # Full-page skeleton for Suspense fallback
 │       ├── TableSkeleton.tsx   # Table row skeletons
-│       └── ActivityFeed.tsx    # Recent activity list for Dashboard
+│       ├── ActivityFeed.tsx    # Recent activity list for Dashboard
+│       ├── DocumentStatusCard.tsx   # NEW — Document status with mode badge
+│       ├── SignerChain.tsx          # NEW — Sequential mode step-by-step visual
+│       ├── SignerGrid.tsx           # NEW — Parallel mode flat signer cards
+│       ├── InstanceTable.tsx        # NEW — Bulk mode recipient table
+│       └── AuditTrailDrawer.tsx     # NEW — Slide-out audit trail panel
 │
 ├── lib/
 │   ├── mock-data/
-│   │   ├── documents.mock.ts   # 10+ sample documents with full field data
-│   │   ├── templates.mock.ts   # 8 Nepal-specific templates
-│   │   ├── recipients.mock.ts  # Sample signers with Nepali names
+│   │   ├── documents.mock.ts   # 10+ sample documents with sent/received direction
+│   │   ├── templates.mock.ts   # 8 Nepal-specific templates (hidden but data kept)
+│   │   ├── recipients.mock.ts  # Sample signers with extended fields (phone, company, PAN)
 │   │   ├── audit-logs.mock.ts  # Sample audit trail events
-│   │   └── user.mock.ts        # Logged-in user profile
+│   │   ├── user.mock.ts        # Logged-in user profile
+│   │   ├── company.mock.ts     # NEW — Mock company data for the user
+│   │   └── signatures.mock.ts  # NEW — Pre-existing user signatures
 │   │
 │   ├── stores/
-│   │   ├── useDocumentStore.ts # Documents, active document, fields, recipients
+│   │   ├── useDocumentStore.ts # Documents, active document, fields, recipients, signing logic
 │   │   ├── useUserStore.ts     # Auth state, user profile
-│   │   └── useUIStore.ts       # Theme, language, sidebar collapsed state
+│   │   ├── useUIStore.ts       # Theme, language, sidebar collapsed state
+│   │   ├── useRecipientStore.ts # Contacts with extended CRUD
+│   │   ├── useTemplateStore.ts  # Templates (kept, hidden from UI)
+│   │   ├── useCompanyStore.ts   # NEW — Company info management
+│   │   └── useSignatureStore.ts # NEW — User signature collection management
 │   │
 │   ├── hooks/
 │   │   ├── useDocuments.ts     # TanStack Query hook — fetches from mock data
 │   │   ├── useDocument.ts      # Single document by ID
 │   │   ├── usePDFDimensions.ts # Reads PDF page width/height for field positioning
-│   │   └── useSigningFlow.ts   # Multi-signer state machine logic
+│   │   ├── useAuditLogs.ts     # Audit log query hook
+│   │   └── useSigningFlow.ts   # Multi-signer state machine logic (enhanced for roles)
 │   │
 │   └── utils/
 │       ├── document-status.ts  # Status label/color helpers
@@ -118,11 +148,14 @@ src/
 │       └── constants.ts        # App-wide constants
 │
 ├── types/
-│   ├── document.types.ts
-│   ├── recipient.types.ts
-│   ├── signature.types.ts
+│   ├── document.types.ts       # IDocument (with direction, signingMode, roles, auditTrail)
+│   ├── recipient.types.ts      # IRecipient (with phone, companyName, designation, panNumber)
+│   ├── signature.types.ts      # ISignatureData + IUserSignature (with name, color)
 │   ├── template.types.ts
-│   └── user.types.ts
+│   ├── user.types.ts           # IUser (with companyId)
+│   ├── company.types.ts        # NEW — ICompany (Nepal-specific company info)
+│   ├── role.types.ts           # NEW — IRole, RoleStatus
+│   └── audit.types.ts          # IAuditEvent (extended with roleId, ipAddress, userAgent)
 │
 └── i18n/
     ├── index.ts                # i18next config
@@ -138,21 +171,31 @@ src/
 
 ```
 useDocumentStore
-  ├── documents[]              ← all documents (loaded from mock-data)
+  ├── documents[]              ← all documents (loaded from mock-data, includes sent/received)
   ├── activeDocument           ← currently open document
   ├── activeDocument.fields[]  ← placed signature fields
   ├── activeDocument.recipients[]
+  ├── activeDocument.roles[]       ← NEW: named roles for multi-signer
+  ├── activeDocument.signingMode   ← NEW: sequential | parallel | bulk
+  ├── activeDocument.auditTrail[]  ← NEW: audit events
   ├── setActiveDocument()
   ├── addField()
-  ├── updateField()
   ├── removeField()
-  └── updateDocumentStatus()
+  ├── updateField()
+  ├── updateDocumentStatus()
+  ├── addDocument()
+  ├── sendDocument()               ← NEW: mode-aware send logic
+  ├── addRole()                    ← NEW
+  ├── updateRole()                 ← NEW
+  ├── removeRole()                 ← NEW
+  └── reorderRoles()               ← NEW
 
 useUserStore
   ├── user                     ← mock logged-in user
   ├── isAuthenticated
-  ├── login()                  ← sets user, always succeeds (mock)
-  └── logout()
+  ├── login()
+  ├── logout()
+  └── updateUser()
 
 useUIStore
   ├── theme                    ← 'light' | 'dark'
@@ -161,6 +204,27 @@ useUIStore
   ├── toggleTheme()
   ├── toggleLanguage()
   └── toggleSidebar()
+
+useRecipientStore
+  ├── recipients[]             ← contacts with extended fields (phone, company, PAN)
+  ├── addRecipient()
+  ├── updateRecipient()
+  ├── removeRecipient()
+  └── getRecipientById()
+
+useCompanyStore                ← NEW
+  ├── company                  ← ICompany | null
+  ├── setCompany()
+  ├── updateCompany()
+  └── clearCompany()
+
+useSignatureStore              ← NEW
+  ├── signatures[]             ← IUserSignature[] (multiple named signatures)
+  ├── addSignature()
+  ├── removeSignature()
+  ├── updateSignature()
+  ├── setDefault()
+  └── getDefault()
 ```
 
 ### TanStack Query
@@ -192,12 +256,43 @@ const router = createBrowserRouter([
   {
     element: <ProtectedLayout />,  // checks useUserStore.isAuthenticated
     children: [
-      { path: '/dashboard', element: <Suspense fallback={<PageSkeleton />}><Dashboard /></Suspense> },
-      { path: '/documents', element: <Suspense ...><DocumentsList /></Suspense> },
-      // ... all protected routes
+      { path: '/dashboard', element: <Dashboard /> },       // Includes merged analytics
+      { path: '/documents', element: <DocumentsList /> },
+      { path: '/documents/upload', element: <DocumentUpload /> },
+      { path: '/documents/:id', element: <DocumentView /> },
+      { path: '/documents/:id/edit', element: <DocumentEditor /> },
+      { path: '/documents/:id/send', element: <DocumentSend /> },
+      { path: '/signatures', element: <SignaturesPage /> },  // NEW — standalone signature mgmt
+      { path: '/vault', element: <VaultPage /> },
+      { path: '/contacts', element: <ContactsPage /> },
+      { path: '/administration/company', element: <CompanyPage /> }, // NEW
+      { path: '/settings', element: <SettingsPage /> },
+      // HIDDEN:
+      // { path: '/templates', element: <TemplatesPage /> },
+      // { path: '/analytics', element: <AnalyticsPage /> },
     ]
   }
 ])
+```
+
+---
+
+## Sidebar Navigation Structure
+
+```
+Dashboard          → /dashboard
+Documents          → /documents
+Signatures         → /signatures          ← NEW: standalone signature page
+─── Administration ───
+Contacts           → /contacts
+Company            → /administration/company  ← NEW
+─── ─── ─── ─── ───
+Settings           → /settings
+
+HIDDEN (commented out):
+Templates          → /templates
+Analytics          → /analytics (merged into dashboard)
+Vault              → /vault (still accessible, just not in primary nav — linked from dashboard)
 ```
 
 ---
@@ -212,9 +307,15 @@ The field placement editor is the most complex screen. It uses a three-panel lay
 │                       │                            │                           │
 │  [Drag] Signature     │  ┌──── PDF Page ────┐     │  Selected Field:          │
 │  [Drag] Initials      │  │                  │     │  Type: Signature           │
-│  [Drag] Date          │  │  [Field overlay] │     │  Assigned to: Recipient 1 │
+│  [Drag] Date          │  │  [Field overlay] │     │  Assigned to: Role 1      │
 │  [Drag] Text          │  │                  │     │  Required: Yes            │
-│  [Drag] Seal/Stamp    │  └──────────────────┘     │  Signing order: 1         │
+│  [Drag] Checkbox      │  └──────────────────┘     │  Color: #E8760A           │
+│  [Drag] Seal/Stamp    │                            │                           │
+│  ───────────────────  │                            │  ─────────────────────── │
+│  SigningModeSelector  │                            │  RolePanel:              │
+│  [Sequential]         │                            │  Role 1: Client          │
+│  [Parallel]           │                            │  Role 2: Legal Approver  │
+│  [Bulk]               │                            │  + Add Role              │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -222,23 +323,68 @@ The field placement editor is the most complex screen. It uses a three-panel lay
 1. `FieldToolbar` items are `<Draggable>` with `data.fieldType`
 2. `CanvasContainer` is a `<Droppable>` zone
 3. On `DragEndEvent`, calculate drop coordinates relative to the PDF canvas
-4. Dispatch `addField({ type, x, y, pageNumber, recipientId })` to `useDocumentStore`
+4. Dispatch `addField({ type, x, y, pageNumber, assignedRoleId })` to `useDocumentStore`
 5. `FieldOverlay` components render as absolutely positioned divs over the PDF
 
 ---
 
-## Multi-Signer Workflow State Machine
+## Multi-Signer Workflow Architecture
+
+### Signing Modes
+
+```
+┌──────────────┬─────────────────────────────────────────────┐
+│ SEQUENTIAL   │ Signers sign in order. Role #1 first,      │
+│              │ then #2, then #3. Each role is notified     │
+│              │ only after the previous completes.           │
+├──────────────┼─────────────────────────────────────────────┤
+│ PARALLEL     │ All signers notified simultaneously.        │
+│              │ Each signs independently. Document           │
+│              │ completes when all required roles sign.      │
+├──────────────┼─────────────────────────────────────────────┤
+│ BULK         │ One template, many recipients. Each gets    │
+│              │ their own independent document instance.     │
+│              │ No shared signing — each instance is solo.   │
+└──────────────┴─────────────────────────────────────────────┘
+```
+
+### Document Status Flow
 
 ```
 Document Status Flow:
-  Draft → Sent → [per recipient: Waiting → Notified → Viewed → Signed]
-                                                               ↓
-                                              All signed? → Completed
-                                              Deadline passed? → Expired
-                                              Any declined? → Declined
+  Draft → Sent → [per role: Pending → Notified → Viewed → Signed]
+                                                          ↓
+                                         All required signed? → Completed
+                                         Deadline passed? → Expired
+                                         Any declined? (sequential) → Voided
+                                         Any declined? (parallel) → Sender notified
 ```
 
-Recipient status progresses independently. After each signature, the store checks if all required signers are complete and auto-updates the document status.
+### Signing Chain Rules
+
+**Sequential Mode:**
+- A signer cannot access the document if the previous signer has not completed
+- If any signer declines, the entire document is voided and sender is notified
+- If a signer's link expires, sender can re-send to that slot without restarting the chain
+- Sender can reassign a role to a different person mid-chain only if that role has not yet signed
+
+**Parallel Mode:**
+- Document finalizes only when ALL required roles complete
+- Optional roles (CC) do not block finalization
+- If one parallel signer declines, sender is notified but other signers can continue
+- Sender can choose: void on any decline, or continue and resolve manually
+
+**Bulk Mode:**
+- Each instance is fully independent
+- Sender can void individual instances without affecting the batch
+- Bulk mode does not support sequential or parallel within a single instance
+- CSV columns can map to text fields in the template
+
+**Field Rules:**
+- A field with no assigned role is invalid — block send until resolved
+- Date fields auto-populate with signing timestamp unless sender locks a specific date
+- Signature fields require explicit signer action — cannot be auto-filled
+- Once any signer has signed, the document layout (pages, fields) cannot be modified
 
 ---
 
@@ -285,6 +431,11 @@ Theme class is toggled on `document.documentElement` by `useUIStore.toggleTheme(
 - Preview renders the seal image at 80% opacity over the PDF position
 - Stored as base64 string in field data (mock only — no real storage)
 
+### Company Management (Nepal-specific)
+- PAN Number (Permanent Account Number) — Nepal tax authority requirement
+- Company registration number from Department of Company Administration
+- Address format: Street, City (Municipality), District, Province, Nepal
+
 ---
 
 ## Performance Considerations
@@ -293,6 +444,7 @@ Theme class is toggled on `document.documentElement` by `useUIStore.toggleTheme(
 - react-pdf worker is loaded via CDN to avoid bundling PDF.js
 - Skeleton loading on every async operation (minimum 300ms simulated delay)
 - Images (seals, signatures) are base64 in mock mode — in production would be S3 presigned URLs
+- Templates and Analytics routes are code-split and hidden (not loaded unless accessed directly)
 
 ---
 
@@ -305,3 +457,6 @@ When replacing mock data with a real backend:
 3. Zustand stores keep their shape — only initialization changes
 4. Auth store gets real JWT handling
 5. No component changes required
+6. Company store can integrate with Nepal DoC API for company verification
+7. Signature store can use cloud storage (S3/GCS) instead of base64
+8. Document instances (bulk mode) can be tracked via WebSocket for real-time status updates

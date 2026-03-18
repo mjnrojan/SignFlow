@@ -20,10 +20,12 @@ import {
   Mail,
   Zap,
   Building2,
+  X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { SignatureModal } from '@/components/signature/SignatureModal';
 
 export default function SettingsPage() {
   const { user, updateUser } = useUserStore();
@@ -33,11 +35,24 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState('profile');
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  
+  // Signature Modal State
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<'signature' | 'seal'>('signature');
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 400);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleSignatureSelect = (dataUrl: string) => {
+    if (modalType === 'signature') {
+      updateUser({ signatureBase64: dataUrl });
+    } else {
+      updateUser({ sealBase64: dataUrl });
+    }
+    setIsModalOpen(false);
+  };
 
   if (isLoading) {
     return (
@@ -180,23 +195,88 @@ export default function SettingsPage() {
                      <CardDescription>{t('settings.signatures.description')}</CardDescription>
                   </CardHeader>
                   <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                     <div className="p-8 border-2 border-dashed border-border rounded-3xl flex flex-col items-center justify-center text-center space-y-4 hover:border-primary/30 transition-colors cursor-pointer group">
-                        <div className="size-16 bg-muted rounded-full flex items-center justify-center group-hover:bg-primary/10 transition-colors">
-                           <PenLine className="size-8 text-muted-foreground group-hover:text-primary" />
-                        </div>
-                        <div>
-                           <p className="font-bold">{t('settings.signatures.default')}</p>
-                           <p className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">Not Set</p>
-                        </div>
+                     {/* Default Signature Card */}
+                     <div 
+                        onClick={() => {
+                          setModalType('signature');
+                          setIsModalOpen(true);
+                        }}
+                        className={cn(
+                          "relative p-8 border-2 rounded-3xl flex flex-col items-center justify-center text-center space-y-4 transition-all cursor-pointer group overflow-hidden",
+                          user?.signatureBase64 
+                            ? "border-primary/20 bg-primary/5 hover:border-primary/40" 
+                            : "border-dashed border-border hover:border-primary/30"
+                        )}
+                     >
+                        {user?.signatureBase64 ? (
+                          <div className="w-full flex flex-col items-center animate-in zoom-in-95 duration-300">
+                            <div className="h-32 w-full flex items-center justify-center bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-inner mb-4">
+                              <img src={user.signatureBase64} alt="Signature" className="max-h-full max-w-full object-contain" />
+                            </div>
+                            <p className="font-bold text-sm">{t('settings.signatures.default')}</p>
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                updateUser({ signatureBase64: undefined });
+                              }}
+                              className="absolute top-2 right-2 p-2 text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100"
+                            >
+                              <X className="size-4" />
+                            </button>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="size-16 bg-muted rounded-full flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                               <PenLine className="size-8 text-muted-foreground group-hover:text-primary" />
+                            </div>
+                            <div>
+                               <p className="font-bold">{t('settings.signatures.default')}</p>
+                               <p className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">Not Set</p>
+                            </div>
+                          </>
+                        )}
                      </div>
-                     <div className="p-8 border-2 border-dashed border-border rounded-3xl flex flex-col items-center justify-center text-center space-y-4 hover:border-secondary/30 transition-colors cursor-pointer group">
-                        <div className="size-16 bg-muted rounded-full flex items-center justify-center group-hover:bg-primary/10 transition-colors">
-                           <Shield className="size-8 text-muted-foreground group-hover:text-primary" />
-                        </div>
-                        <div>
-                           <p className="font-bold">{t('settings.signatures.seal')}</p>
-                           <p className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">Not Uploaded</p>
-                        </div>
+
+                     {/* Official Seal Card */}
+                     <div 
+                        onClick={() => {
+                          setModalType('seal');
+                          setIsModalOpen(true);
+                        }}
+                        className={cn(
+                          "relative p-8 border-2 rounded-3xl flex flex-col items-center justify-center text-center space-y-4 transition-all cursor-pointer group overflow-hidden",
+                          user?.sealBase64 
+                            ? "border-secondary/20 bg-secondary/5 hover:border-secondary/40" 
+                            : "border-dashed border-border hover:border-secondary/30"
+                        )}
+                     >
+                        {user?.sealBase64 ? (
+                          <div className="w-full flex flex-col items-center animate-in zoom-in-95 duration-300">
+                            <div className="size-32 flex items-center justify-center bg-white dark:bg-slate-900 rounded-full p-6 shadow-inner mb-4">
+                              <img src={user.sealBase64} alt="Seal" className="max-h-full max-w-full object-contain" />
+                            </div>
+                            <p className="font-bold text-sm">{t('settings.signatures.seal')}</p>
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                updateUser({ sealBase64: undefined });
+                              }}
+                              className="absolute top-2 right-2 p-2 text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100"
+                            >
+                              <X className="size-4" />
+                            </button>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="size-16 bg-muted rounded-full flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                               <Shield className="size-8 text-muted-foreground group-hover:text-primary" />
+                            </div>
+                            <div>
+                               <p className="font-bold">{t('settings.signatures.seal')}</p>
+                               <p className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">Not Uploaded</p>
+                            </div>
+                          </>
+                        )}
                      </div>
                   </CardContent>
                </Card>
@@ -316,6 +396,14 @@ export default function SettingsPage() {
           </div>
         </main>
       </div>
+      
+      <SignatureModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSelect={handleSignatureSelect}
+        type={modalType}
+        defaultName={user?.name}
+      />
     </div>
   );
 }

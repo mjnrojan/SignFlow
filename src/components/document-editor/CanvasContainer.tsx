@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { Document, Page } from 'react-pdf';
 import { useDroppable } from '@dnd-kit/core';
-import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Loader2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Loader2, ShieldCheck } from 'lucide-react';
 import { FieldOverlay } from './FieldOverlay';
 import { type IDocumentField } from '@/types/document.types';
 import { useRecipientStore } from '@/lib/stores/useRecipientStore';
@@ -12,7 +12,7 @@ interface CanvasContainerProps {
   fileUrl: string;
   fields: IDocumentField[];
   activeFieldId?: string | null;
-  onSelectField: (id: string) => void;
+  onSelectField: (id: string, force?: boolean) => void;
   onRemoveField: (id: string) => void;
   onUpdateField?: (id: string, updates: any) => void;
 }
@@ -38,9 +38,13 @@ export function CanvasContainer({ fileUrl, fields, activeFieldId, onSelectField,
 
   const onPageLoadSuccess = (page: any) => {
     setPageDimensions({
-      width: page.width || pageRef.current?.offsetWidth || 0,
-      height: page.height || pageRef.current?.offsetHeight || 0
+      width: page.width || pageRef.current?.offsetWidth || 600,
+      height: page.height || pageRef.current?.offsetHeight || 800
     });
+  };
+
+  const onDocumentLoadError = () => {
+    setPageDimensions({ width: 600, height: 800 });
   };
 
   const handleZoom = (direction: 'in' | 'out') => {
@@ -96,21 +100,35 @@ export function CanvasContainer({ fileUrl, fields, activeFieldId, onSelectField,
         <div 
           ref={setNodeRef}
           className={`
-            relative shadow-[0_30px_90px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_90px_rgba(0,0,0,0.3)] transition-all duration-300 transform-gpu
+            relative shadow-[0_30px_90px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_90px_rgba(0,0,0,0.3)] transition-all duration-300 transform-gpu bg-white dark:bg-slate-900
             ${isOver ? 'ring-8 ring-primary/10 scale-[1.005]' : ''}
           `}
+          style={{ 
+            width: pageDimensions.width * scale || (numPages === 0 ? 600 : 'auto'), 
+            height: pageDimensions.height * scale || (numPages === 0 ? 800 : 'auto'),
+            minWidth: numPages === 0 ? 600 : undefined,
+            minHeight: numPages === 0 ? 800 : undefined
+          }}
         >
           <Document 
             file={fileUrl} 
             onLoadSuccess={onDocumentLoadSuccess}
+            onLoadError={onDocumentLoadError}
             loading={
-               <div className="flex flex-col items-center justify-center p-20 space-y-4">
-                  <div className="relative">
-                     <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full"></div>
-                     <Loader2 className="size-12 animate-spin text-primary relative z-10" />
-                  </div>
-                  <p className="text-sm font-bold font-['Fraunces']">Initializing Secure Stream</p>
+               <div className="flex flex-col items-center justify-center p-20 space-y-4 min-h-[600px]">
+                  <Loader2 className="size-12 animate-spin text-primary opacity-20" />
                </div>
+            }
+            error={
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center space-y-4">
+                 <div className="size-16 bg-muted rounded-2xl flex items-center justify-center mb-2">
+                    <ShieldCheck className="size-8 text-muted-foreground opacity-20" />
+                 </div>
+                 <p className="text-sm font-bold font-['Fraunces'] text-muted-foreground">Preview Mode Active</p>
+                 <p className="text-[10px] text-muted-foreground/60 max-w-[200px] font-['Syne']">
+                    The PDF background could not be loaded, but you can still place and sign fields on this canvas.
+                 </p>
+              </div>
             }
           >
             <Page 
@@ -119,13 +137,14 @@ export function CanvasContainer({ fileUrl, fields, activeFieldId, onSelectField,
               inputRef={pageRef}
               onLoadSuccess={onPageLoadSuccess}
               className="relative shadow-lg ring-1 ring-border"
+              renderTextLayer={false}
+              renderAnnotationLayer={false}
             />
           </Document>
 
           {/* Draggable Interaction Layer */}
           <div 
             className="absolute inset-0 z-10 pointer-events-none"
-            style={{ width: pageRef.current?.offsetWidth, height: pageRef.current?.offsetHeight }}
           >
             {/* Placed Fields */}
             {fields.filter(f => f.position.pageNumber === pageNumber).map((field) => {
@@ -140,8 +159,8 @@ export function CanvasContainer({ fileUrl, fields, activeFieldId, onSelectField,
                     onUpdate={onUpdateField}
                     color={recipient?.color}
                     recipientOrder={recipient?.order}
-                    containerWidth={pageDimensions.width}
-                    containerHeight={pageDimensions.height}
+                    containerWidth={pageDimensions.width * scale || 600}
+                    containerHeight={pageDimensions.height * scale || 800}
                   />
                 );
             })}

@@ -85,6 +85,7 @@ export default function DocumentUploadPage() {
             id: newId,
             title,
             status: 'DRAFT' as any,
+            direction: 'sent',
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
             fileUrl: '/mock-pdfs/sample.pdf',

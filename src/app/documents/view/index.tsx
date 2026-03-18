@@ -20,6 +20,7 @@ import { useRecipientStore } from '@/lib/stores/useRecipientStore';
 import { SignerStatus } from '@/components/shared/SignerStatus';
 import { AuditPanel } from '@/components/viewer/AuditPanel';
 import { ShareModal } from '@/components/shared/ShareModal';
+import { FieldType } from '@/types/document.types';
 
 export default function DocumentViewerPage() {
   const { id } = useParams<{ id: string }>();
@@ -131,36 +132,37 @@ export default function DocumentViewerPage() {
                     {/* View Section */}
                     <div className="relative group">
                       {/* Mock Sheet */}
-                      <div className="aspect-[1/1.4] bg-white dark:bg-slate-900 rounded-lg shadow-2xl border border-border relative p-12 overflow-hidden mx-auto pointer-events-none select-none">
-                        {/* Watermark */}
+                      <div className="aspect-[1/1.4] bg-white dark:bg-slate-900 rounded-lg shadow-2xl border border-border relative p-12 md:p-16 overflow-hidden mx-auto">
                         <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] rotate-[-45deg] pointer-events-none uppercase font-bold text-6xl tracking-[1em] select-none">
                           Preview Only • SignFlow Nepal
                         </div>
 
-                        {/* Header Decoration */}
                         <div className="w-24 h-2 bg-slate-100 dark:bg-slate-800 rounded-full mb-8"></div>
                         
-                        {/* Content Lines */}
                         <div className="space-y-4">
                           <div className="h-4 bg-slate-50 dark:bg-slate-800/50 rounded w-1/3 mb-10"></div>
-                          <div className="h-3 bg-slate-50 dark:bg-slate-800/30 rounded w-full"></div>
-                          <div className="h-3 bg-slate-50 dark:bg-slate-800/30 rounded w-full"></div>
-                          <div className="h-3 bg-slate-50 dark:bg-slate-800/30 rounded w-5/6"></div>
-                          <div className="h-3 bg-slate-50 dark:bg-slate-800/30 rounded w-full mt-8"></div>
-                          <div className="h-3 bg-slate-50 dark:bg-slate-800/30 rounded w-4/5"></div>
+                          {Array.from({ length: 6 }).map((_, i) => (
+                            <div key={i} className="h-3 bg-slate-50 dark:bg-slate-800/30 rounded w-full" style={{ width: `${Math.random() * 20 + 80}%` }}></div>
+                          ))}
 
-                          {/* Signature Fields (Abstract) */}
-                          <div className="mt-20 flex justify-between gap-10">
-                             <div className="flex-1 space-y-4">
-                                <div className="h-10 bg-primary/5 border border-dashed border-primary/20 rounded flex items-center justify-center text-[10px] font-bold text-primary/40 uppercase tracking-widest">Awaiting Signature</div>
+                          {/* Render actual signature fields if they have values */}
+                          <div className="mt-20 pt-10 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-8">
+                            {activeDocument.fields.filter(f => f.type === FieldType.SIGNATURE || f.type === FieldType.SEAL).map((field) => (
+                              <div key={field.id} className="space-y-4">
+                                <div className="h-20 border border-dashed border-border rounded-xl flex items-center justify-center relative bg-muted/5">
+                                  {field.value ? (
+                                    <img src={field.value} alt="Signed" className="max-w-full max-h-full object-contain p-2" />
+                                  ) : (
+                                    <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest opacity-40">Awaiting {field.type}</span>
+                                  )}
+                                  <div className="absolute -top-2 -right-2 size-5 bg-primary rounded-full text-[8px] flex items-center justify-center text-white border-2 border-background">
+                                    {field.recipientId?.slice(-1)}
+                                  </div>
+                                </div>
                                 <div className="h-px bg-slate-100 dark:bg-slate-800 w-full"></div>
-                                <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Party A: Aarav Sharma</p>
-                             </div>
-                             <div className="flex-1 space-y-4">
-                                <div className="h-10 bg-muted border border-dashed border-border rounded flex items-center justify-center text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">Party B: Bikash Tamang</div>
-                                <div className="h-px bg-slate-100 dark:bg-slate-800 w-full"></div>
-                                <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Party B: Recipient</p>
-                             </div>
+                                <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Party: {field.recipientId}</p>
+                              </div>
+                            ))}
                           </div>
                         </div>
                       </div>
